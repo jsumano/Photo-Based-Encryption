@@ -24,5 +24,20 @@ namespace Photo_Based_Encryption
         {
             InitializeComponent();
         }
+
+        private void LoadImageButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void LoadFiletoEncryptButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void EncryptButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
