@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Photo_Based_Encryption"
         mc:Ignorable="d"
-        Title="Photo-Based Encryption" Height="635" Width="525">
+        Title="Photo-Based Encryption" Height="650" Width="525">
     <Border Padding="10">
 
         <StackPanel>

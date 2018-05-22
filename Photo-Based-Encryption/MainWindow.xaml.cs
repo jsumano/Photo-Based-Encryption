@@ -27,7 +27,9 @@ namespace Photo_Based_Encryption
 
         private void LoadImageButton_Click(object sender, RoutedEventArgs e)
         {
+            PhotoLoader pl = new PhotoLoader();
 
+            pl.FileDialog();
         }
 
         private void LoadFiletoEncryptButton_Click(object sender, RoutedEventArgs e)
