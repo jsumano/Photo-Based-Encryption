@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Drawing;
 using Microsoft.Win32;
+using System.Threading.Tasks;
 
 namespace Photo_Based_Encryption
 {
@@ -11,6 +12,22 @@ namespace Photo_Based_Encryption
         /// The verified loaded image
         /// </summary>
         public Bitmap Image { get; private set; }
+
+        /// <summary>
+        /// The current state of the PhotoLoader
+        /// </summary>
+        public ImageStatus Status
+        {
+            get
+            {
+                if (Image != null)
+                    return ImageStatus.Loaded;
+                else if (Image == null)
+                    return ImageStatus.NotLoaded;
+                else
+                    return ImageStatus.Analyzing;
+            } 
+        }
 
         /// <summary>
         /// Opens the File Dialog to select the seed image.
@@ -29,13 +46,16 @@ namespace Photo_Based_Encryption
 
             // If the image passes inspection it is assigned else an error message is returned
             if (photoStatus == PhotoResult.Approved)
-                //Image = loadedImage;
+            {
+                Image = loadedImage;
                 MessageBox.Show("Approved");
+            }
             else if (photoStatus == PhotoResult.FailedSize)
                 MessageBox.Show("The minimum size for a seed image is 100x100. Please select a larger image file.");
             else if (photoStatus == PhotoResult.FailedComplexity)
                 MessageBox.Show("This image is not sufficiently complex. Please select an image with a greater range of color values.");
         }
+
 
         /// <summary>
         /// Inspects the loaded image for size and complexity.
@@ -44,6 +64,7 @@ namespace Photo_Based_Encryption
         /// <returns></returns>
         private PhotoResult Inspect(Bitmap image)
         {
+            MessageBox.Show("Analyzing");
             if (image.Width < 100 || image.Height < 100)
                 return PhotoResult.FailedSize;
             else if (PixelReader.ColorCount(image, 10) == false)
