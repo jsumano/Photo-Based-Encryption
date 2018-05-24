@@ -38,7 +38,7 @@ namespace Photo_Based_Encryption
         }
 
         /// <summary>
-        /// Inspects the loaded image for size and complexity
+        /// Inspects the loaded image for size and complexity.
         /// </summary>
         /// <param name="image">The image to inspect.</param>
         /// <returns></returns>

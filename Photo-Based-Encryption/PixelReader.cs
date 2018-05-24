@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using System.Windows;
 
 namespace Photo_Based_Encryption
 {
@@ -19,6 +20,27 @@ namespace Photo_Based_Encryption
         public static bool ColorCount(Bitmap image, int threshold)
         {
             List<Color> imageColors = new List<Color>();
+
+            // Iterate through all the pixels in the image until the threshold is reached.
+            for (int row = 0; row < image.Width; row++)
+            {
+                for (int column = 0; column < image.Height; column++)
+                {
+                    string colorText = image.GetPixel(row, column).ToString();
+                    // Splits colorText so that pixel values can be parsed more easily.
+                    string[] tokens = colorText.Split(' ', '[', ']', ',', '=');
+                    // Creates a new color using the RGB pixel values.
+                    Color color = new Color();
+                    color = Color.FromArgb(Convert.ToInt32(tokens[6]), Convert.ToInt32(tokens[9]), Convert.ToInt32(tokens[12]));
+                    // Adds this color to the list of different colors if it isn't within the collection.
+                    if (!imageColors.Contains(color))
+                        imageColors.Add(color);
+                    // If the threshold is met the image passes for complexity.
+                    if (imageColors.Count() == threshold)
+                        return true;
+                }
+            }
+            // The threshold was not met.
             return false;
         }
     }
