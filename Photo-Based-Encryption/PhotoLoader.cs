@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Windows;
 using System.Drawing;
 using Microsoft.Win32;
 
@@ -28,7 +29,8 @@ namespace Photo_Based_Encryption
 
             // If the image passes inspection it is assigned else an error message is returned
             if (photoStatus == PhotoResult.Approved)
-                Image = loadedImage;
+                //Image = loadedImage;
+                MessageBox.Show("Approved");
             else if (photoStatus == PhotoResult.FailedSize)
                 MessageBox.Show("The minimum size for a seed image is 100x100. Please select a larger image file.");
             else if (photoStatus == PhotoResult.FailedComplexity)
@@ -44,6 +46,8 @@ namespace Photo_Based_Encryption
         {
             if (image.Width < 100 || image.Height < 100)
                 return PhotoResult.FailedSize;
+            else if (PixelReader.ColorCount(image, 10) == false)
+                return PhotoResult.FailedComplexity;
             else
                 return PhotoResult.Approved;
         }
