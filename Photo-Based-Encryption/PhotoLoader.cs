@@ -14,7 +14,7 @@ namespace Photo_Based_Encryption
         public Bitmap Image { get; private set; }
 
         /// <summary>
-        /// The current state of the PhotoLoader
+        /// The current state of the PhotoLoader.
         /// </summary>
         public ImageStatus Status
         {
@@ -35,7 +35,7 @@ namespace Photo_Based_Encryption
         public void FileDialog()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Image Files (*.bmp*.jpg*.png*.gif)|*.bmp;*.jpg*;.png*;.gif|Bitmap (*.bmp)|*.bmp|JPEG (*.jpg)|*.jpg|PNG (*.png)|*.png|GIF (*.gif)|*.gif|All Files (*.*)|*.*";
+            openFileDialog.Filter = "Image Files (*.bmp*.jpg*.png*.gif)|*.bmp;*.jpg;.*.png;*.gif|Bitmap (*.bmp)|*.bmp|JPEG (*.jpg)|*.jpg|PNG (*.png)|*.png|GIF (*.gif)|*.gif|All Files (*.*)|*.*";
 
             // Returns if the user does not select a file
             if (openFileDialog.ShowDialog() != true)
