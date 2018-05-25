@@ -24,7 +24,7 @@
             </Grid>
             
             <!-- Image to be Analyzed -->
-            <TextBlock Text="Image to be Analyzed" Margin="0 10"/>
+            <TextBlock x:Name="ImageStatusText" Text="Image to be Analyzed" Margin="0 10"/>
             <Image x:Name="ImageBox" Height="400"/>
 
 

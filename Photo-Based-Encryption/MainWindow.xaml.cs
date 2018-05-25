@@ -20,6 +20,8 @@ namespace Photo_Based_Encryption
     /// </summary>
     public partial class MainWindow : Window
     {
+        PhotoLoader pl = new PhotoLoader();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -27,8 +29,6 @@ namespace Photo_Based_Encryption
 
         private void LoadImageButton_Click(object sender, RoutedEventArgs e)
         {
-            PhotoLoader pl = new PhotoLoader();
-
             pl.FileDialog();
         }
 
