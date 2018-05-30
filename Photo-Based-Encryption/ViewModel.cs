@@ -17,8 +17,6 @@ namespace Photo_Based_Encryption
 
         private PhotoLoader photoLoader;
 
-        public Bitmap Image { get; private set; }
-
         public string ImagePath { get; private set; }
 
         public string StatusText { get; set; }
@@ -32,9 +30,9 @@ namespace Photo_Based_Encryption
         public void LoadPhoto()
         {
             // Loads the photo into a temporary Bitmap
-            Bitmap loadedPhoto = photoLoader.FileDialog();
+            string loadedPath = photoLoader.FileDialog();
 
-            if (loadedPhoto == null)
+            if (loadedPath == null)
             {
                 ImagePath = null;
                 return;
@@ -42,13 +40,14 @@ namespace Photo_Based_Encryption
 
             // Inspects the photo for size and complexity
             StatusText = "Analyzing image...";
+            // Create a bitmap of the image file to inspect.
+            Bitmap loadedPhoto = new Bitmap(loadedPath);
             PhotoResult result = photoLoader.Inspect(loadedPhoto);
 
             // If the image passes inspection it is assigned else an error message is returned.
             if (result == PhotoResult.Approved)
             {
-                Image = loadedPhoto;
-                ImagePath = photoLoader.Path;
+                ImagePath = loadedPath;
                 StatusText = "Approved";
             }
             else if (result == PhotoResult.FailedSize)
