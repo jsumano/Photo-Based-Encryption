@@ -35,12 +35,12 @@ namespace Photo_Based_Encryption
 
         private void LoadFiletoEncryptButton_Click(object sender, RoutedEventArgs e)
         {
-
+            viewModel.LoadTargetFile();
         }
 
         private void EncryptButton_Click(object sender, RoutedEventArgs e)
         {
-
+            viewModel.Encrypt();
         }
 
     }

@@ -17,7 +17,7 @@ namespace Photo_Based_Encryption
 
         private PhotoLoader photoLoader;
 
-        public string ImagePath { get; private set; }
+        public string ImagePath { get; set; }
 
         public string StatusText { get; set; }
 
@@ -25,7 +25,9 @@ namespace Photo_Based_Encryption
         {
             photoLoader = new PhotoLoader();
             StatusText = "Please select a seed image for encryption.";
+            ImagePath = null;
         }
+
 
         public void LoadPhoto()
         {
@@ -49,11 +51,26 @@ namespace Photo_Based_Encryption
             {
                 ImagePath = loadedPath;
                 StatusText = "Approved";
+                return;
             }
             else if (result == PhotoResult.FailedSize)
                 StatusText = "The minimum size for a seed image is 100x100. Please select a larger image file.";
             else if (result == PhotoResult.FailedComplexity)
                 StatusText = "This image is not sufficiently complex. Please select an image with a greater range of color values.";
+
+            // Resets the image path if the image fails inspection.
+            ImagePath = null;
+        }
+
+
+        public void LoadTargetFile()
+        {
+
+        }
+
+        public void Encrypt()
+        {
+
         }
     }
 }
