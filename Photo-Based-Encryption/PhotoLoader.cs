@@ -36,6 +36,11 @@ namespace Photo_Based_Encryption
         }
 
         /// <summary>
+        /// The path of the loaded image.
+        /// </summary>
+        public string Path { get; private set; }
+
+        /// <summary>
         /// Opens the File Dialog to select the seed image. Returns a Bitmap of the selected image.
         /// </summary>
         public Bitmap FileDialog()
@@ -43,11 +48,15 @@ namespace Photo_Based_Encryption
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Image Files (*.bmp*.jpg*.png*.gif)|*.bmp;*.jpg;.*.png;*.gif|Bitmap (*.bmp)|*.bmp|JPEG (*.jpg)|*.jpg|PNG (*.png)|*.png|GIF (*.gif)|*.gif|All Files (*.*)|*.*";
 
-            // Returns if the user does not select a file
+            // Resets the path and returns if the user does not select a file.
             if (openFileDialog.ShowDialog() != true)
+            {
+                Path = null;
                 return null;
+            }
 
-            Bitmap loadedImage = new Bitmap(openFileDialog.FileName);
+            Path = openFileDialog.FileName;
+            Bitmap loadedImage = new Bitmap(Path);
             return loadedImage;
         }
 
