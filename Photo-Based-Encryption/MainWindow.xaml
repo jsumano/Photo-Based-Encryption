@@ -24,8 +24,8 @@
             </Grid>
             
             <!-- Image to be Analyzed -->
-            <TextBlock x:Name="ImageStatusText" Text="Image to be Analyzed" Margin="0 10"/>
-            <Image x:Name="ImageBox" Height="400"/>
+            <TextBlock x:Name="ImageStatusText" Text="{Binding StatusText}" Margin="0 10"/>
+            <Image  Height="400"/>
 
 
             <!-- Select file to be encrypted -->
