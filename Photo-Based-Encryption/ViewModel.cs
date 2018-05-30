@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using Microsoft.Win32;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,8 +18,19 @@ namespace Photo_Based_Encryption
 
         private PhotoLoader photoLoader;
 
+        /// <summary>
+        /// The file path for the seed image.
+        /// </summary>
         public string ImagePath { get; set; }
 
+        /// <summary>
+        /// The file path of the file to encrypt.
+        /// </summary>
+        public string TargetFilePath { get; set; }
+
+        /// <summary>
+        /// A description of the current status.
+        /// </summary>
         public string StatusText { get; set; }
 
         public ViewModel()
@@ -26,6 +38,7 @@ namespace Photo_Based_Encryption
             photoLoader = new PhotoLoader();
             StatusText = "Please select a seed image for encryption.";
             ImagePath = null;
+            TargetFilePath = null;
         }
 
 
@@ -65,7 +78,17 @@ namespace Photo_Based_Encryption
 
         public void LoadTargetFile()
         {
+            // Resets target file path
+            TargetFilePath = null;
 
+            // Instantiates file dialog.
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            // Returns if the user does not select a file.
+            if (openFileDialog.ShowDialog() != true)
+                return;
+
+            // Set the path.
+            TargetFilePath = openFileDialog.FileName;
         }
 
         public void Encrypt()

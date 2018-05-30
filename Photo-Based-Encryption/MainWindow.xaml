@@ -37,7 +37,7 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- Select File to be Encrypted Textbox-->
-                <TextBox x:Name="FiletoEncryptFilenameTextbox" IsReadOnly="True" Padding="2" Grid.Column="0"/>
+                <TextBox Text="{Binding TargetFilePath}" IsReadOnly="True" Padding="2" Grid.Column="0"/>
                 <Button x:Name="LoadFiletoEncryptButton" Click="LoadFiletoEncryptButton_Click" Content="Select File" Grid.Column="1"/>
             </Grid>
             <Button x:Name="EncryptButton" Click="EncryptButton_Click" Content="Encrypt" Margin="0 10"/>
