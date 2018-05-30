@@ -20,26 +20,28 @@ namespace Photo_Based_Encryption
     /// </summary>
     public partial class MainWindow : Window
     {
-        PhotoLoader pl = new PhotoLoader();
+        private ViewModel viewModel = new ViewModel();
 
         public MainWindow()
         {
             InitializeComponent();
+            this.DataContext = viewModel;
         }
 
         private void LoadImageButton_Click(object sender, RoutedEventArgs e)
         {
-            pl.FileDialog();
+            viewModel.LoadPhoto();
         }
 
         private void LoadFiletoEncryptButton_Click(object sender, RoutedEventArgs e)
         {
-
+            viewModel.LoadTargetFile();
         }
 
         private void EncryptButton_Click(object sender, RoutedEventArgs e)
         {
-
+            viewModel.Encrypt();
         }
+
     }
 }

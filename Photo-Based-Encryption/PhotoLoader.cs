@@ -9,51 +9,20 @@ namespace Photo_Based_Encryption
     class PhotoLoader
     {
         /// <summary>
-        /// The verified loaded image
+        /// Opens the File Dialog to select the seed image. Returns a Bitmap of the selected image.
         /// </summary>
-        public Bitmap Image { get; private set; }
-
-        /// <summary>
-        /// The current state of the PhotoLoader.
-        /// </summary>
-        public ImageStatus Status
+        public string FileDialog()
         {
-            get
+            OpenFileDialog openFileDialog = new OpenFileDialog
             {
-                if (Image != null)
-                    return ImageStatus.Loaded;
-                else if (Image == null)
-                    return ImageStatus.NotLoaded;
-                else
-                    return ImageStatus.Analyzing;
-            } 
-        }
+                Filter = "Image Files (*.bmp*.jpg*.png*.gif)|*.bmp;*.jpg;*.png;*.gif|Bitmap (*.bmp)|*.bmp|JPEG (*.jpg)|*.jpg|PNG (*.png)|*.png|GIF (*.gif)|*.gif|All Files (*.*)|*.*"
+            };
 
-        /// <summary>
-        /// Opens the File Dialog to select the seed image.
-        /// </summary>
-        public void FileDialog()
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Image Files (*.bmp*.jpg*.png*.gif)|*.bmp;*.jpg;.*.png;*.gif|Bitmap (*.bmp)|*.bmp|JPEG (*.jpg)|*.jpg|PNG (*.png)|*.png|GIF (*.gif)|*.gif|All Files (*.*)|*.*";
-
-            // Returns if the user does not select a file
+            // Resets the path and returns if the user does not select a file.
             if (openFileDialog.ShowDialog() != true)
-                return;
+                return null;
 
-            Bitmap loadedImage = new Bitmap(openFileDialog.FileName);
-            PhotoResult photoStatus = Inspect(loadedImage);
-
-            // If the image passes inspection it is assigned else an error message is returned
-            if (photoStatus == PhotoResult.Approved)
-            {
-                Image = loadedImage;
-                MessageBox.Show("Approved");
-            }
-            else if (photoStatus == PhotoResult.FailedSize)
-                MessageBox.Show("The minimum size for a seed image is 100x100. Please select a larger image file.");
-            else if (photoStatus == PhotoResult.FailedComplexity)
-                MessageBox.Show("This image is not sufficiently complex. Please select an image with a greater range of color values.");
+            return openFileDialog.FileName;
         }
 
 
@@ -62,9 +31,9 @@ namespace Photo_Based_Encryption
         /// </summary>
         /// <param name="image">The image to inspect.</param>
         /// <returns></returns>
-        private PhotoResult Inspect(Bitmap image)
+        public PhotoResult Inspect(Bitmap image)
         {
-            MessageBox.Show("Analyzing");
+
             if (image.Width < 100 || image.Height < 100)
                 return PhotoResult.FailedSize;
             else if (PixelReader.ColorCount(image, 10) == false)
