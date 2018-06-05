@@ -28,9 +28,12 @@ namespace Photo_Based_Encryption
             this.DataContext = viewModel;
         }
 
-        private void LoadImageButton_Click(object sender, RoutedEventArgs e)
+        private async void LoadImageButton_Click(object sender, RoutedEventArgs e)
         {
-            viewModel.LoadPhoto();
+            // Disable the LoadImageButton until the LoadPhotoAsync method has finished execution.
+            LoadImageButton.IsEnabled = false;
+            await viewModel.LoadPhotoAsync();
+            LoadImageButton.IsEnabled = true;
         }
 
         private void LoadFiletoEncryptButton_Click(object sender, RoutedEventArgs e)

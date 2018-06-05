@@ -9,7 +9,7 @@ namespace Photo_Based_Encryption
     class PhotoLoader
     {
         /// <summary>
-        /// Opens the File Dialog to select the seed image. Returns a Bitmap of the selected image.
+        /// Opens the File Dialog to select the seed image. Returns the path of the selected image.
         /// </summary>
         public string FileDialog()
         {
@@ -18,7 +18,7 @@ namespace Photo_Based_Encryption
                 Filter = "Image Files (*.bmp*.jpg*.png*.gif)|*.bmp;*.jpg;*.png;*.gif|Bitmap (*.bmp)|*.bmp|JPEG (*.jpg)|*.jpg|PNG (*.png)|*.png|GIF (*.gif)|*.gif|All Files (*.*)|*.*"
             };
 
-            // Resets the path and returns if the user does not select a file.
+            // Returns if the user does not select a file.
             if (openFileDialog.ShowDialog() != true)
                 return null;
 
@@ -31,12 +31,16 @@ namespace Photo_Based_Encryption
         /// </summary>
         /// <param name="image">The image to inspect.</param>
         /// <returns></returns>
-        public PhotoResult Inspect(Bitmap image)
+        public async Task<PhotoResult> InspectAsync(Bitmap image)
         {
-
+            // The image fails if it is less than 100x100 pixels.
             if (image.Width < 100 || image.Height < 100)
                 return PhotoResult.FailedSize;
-            else if (PixelReader.ColorCount(image, 10) == false)
+
+            // Checks the image to see if it contains enough different color values to reach the specified threshold.
+            bool passComplexity = await Task.Run(() => PixelReader.ColorCount(image, 10));
+
+            if (!passComplexity)
                 return PhotoResult.FailedComplexity;
             else
                 return PhotoResult.Approved;

@@ -33,6 +33,9 @@ namespace Photo_Based_Encryption
         /// </summary>
         public string StatusText { get; set; }
 
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
         public ViewModel()
         {
             photoLoader = new PhotoLoader();
@@ -42,7 +45,7 @@ namespace Photo_Based_Encryption
         }
 
 
-        public void LoadPhoto()
+        public async Task LoadPhotoAsync()
         {
             // Loads the photo into a temporary Bitmap
             string loadedPath = photoLoader.FileDialog();
@@ -57,7 +60,7 @@ namespace Photo_Based_Encryption
             StatusText = "Analyzing image...";
             // Create a bitmap of the image file to inspect.
             Bitmap loadedPhoto = new Bitmap(loadedPath);
-            PhotoResult result = photoLoader.Inspect(loadedPhoto);
+            PhotoResult result = await photoLoader.InspectAsync(loadedPhoto);
 
             // If the image passes inspection it is assigned else an error message is returned.
             if (result == PhotoResult.Approved)
