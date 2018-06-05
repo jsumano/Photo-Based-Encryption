@@ -30,13 +30,11 @@ namespace Photo_Based_Encryption
                 {
                     for (int column = 0; column < image.Height; column++)
                     {
-                        // Creates a string to parse.
-                        string colorText = image.GetPixel(row, column).ToString();
-                        // Splits colorText so that pixel values can be parsed more easily.
-                        string[] tokens = colorText.Split(' ', '[', ']', ',', '=');
+                        // Create an array with the RGB values for the current pixel.
+                        byte[] rgbValues = GetRGB(image, row, column);
                         // Creates a new color using the RGB pixel values.
                         Color color = new Color();
-                        color = Color.FromArgb(Convert.ToInt32(tokens[6]), Convert.ToInt32(tokens[9]), Convert.ToInt32(tokens[12]));
+                        color = Color.FromArgb(rgbValues[0], rgbValues[1], rgbValues[2]);
 
                         // Adds this color to the list of different colors if it isn't contained within the collection.
                         if (!imageColors.Contains(color))
@@ -49,5 +47,27 @@ namespace Photo_Based_Encryption
                 // The threshold was not met.
                 return false;
         }
+
+        /// <summary>
+        /// Returns an array of bytes with the RGB values for the specified pixel. 
+        /// </summary>
+        /// <param name="bitmap"></param>
+        /// <param name="row"></param>
+        /// <param name="column"></param>
+        /// <returns></returns>
+        private static byte[] GetRGB(Bitmap bitmap, int row, int column)
+        {
+            byte[] rgb = new byte[3];
+            // Creates a string to parse.
+            string colorText = bitmap.GetPixel(row, column).ToString();
+            // Splits colorText so that pixel values can be parsed more easily.
+            string[] tokens = colorText.Split(' ', '[', ']', ',', '=');
+            // Assigns the RGB values.
+            rgb[0] = Convert.ToByte(tokens[6]);
+            rgb[1] = Convert.ToByte(tokens[9]);
+            rgb[2] = Convert.ToByte(tokens[12]);
+            return rgb;
+        }
+
     }
 }
