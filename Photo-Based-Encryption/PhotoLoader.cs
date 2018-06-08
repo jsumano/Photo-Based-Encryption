@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Windows;
 using System.Drawing;
 using Microsoft.Win32;
 using System.Threading.Tasks;
@@ -32,7 +31,7 @@ namespace Photo_Based_Encryption
         /// <param name="image">The image to inspect.</param>
         /// <returns></returns>
         public async Task<PhotoResult> InspectAsync(Bitmap image)
-        {
+        {        
             // The image fails if it is less than 100x100 pixels.
             if (image.Width < 100 || image.Height < 100)
                 return PhotoResult.FailedSize;
