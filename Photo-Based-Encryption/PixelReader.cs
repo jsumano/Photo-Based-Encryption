@@ -63,8 +63,13 @@ namespace Photo_Based_Encryption
             for(int i =0; i < key.Length; i++)
             {
                 // Selects a random row of pixels.
-                int row = rand.Next(bitmap.Width);
+                int row = rand.Next(bitmap.Height);
                 // Selects a random column of pixels.
+                int column = rand.Next(bitmap.Width);
+                // Returns the rgb values.
+                byte[] rgb = GetRGB(bitmap, column, row);
+                // Select the red green or blue value at random and add to the key.
+                key[i] = rgb[rand.Next(2)];
             }
 
             return key;

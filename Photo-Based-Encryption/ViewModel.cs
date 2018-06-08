@@ -96,7 +96,12 @@ namespace Photo_Based_Encryption
 
         public void Encrypt()
         {
-
+            Bitmap bitmap = new Bitmap(ImagePath);
+            byte[] pixelKey = PixelReader.GetPixelKey(bitmap);
+            string result = "";
+            foreach (byte num in pixelKey)
+                result += num + "\n";
+            System.Windows.MessageBox.Show(result);
         }
     }
 }
