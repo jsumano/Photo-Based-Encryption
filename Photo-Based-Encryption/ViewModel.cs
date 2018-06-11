@@ -14,6 +14,7 @@ namespace Photo_Based_Encryption
     [AddINotifyPropertyChangedInterface]
     public class ViewModel : INotifyPropertyChanged
     {
+       
         public event PropertyChangedEventHandler PropertyChanged = (sender, e) => { };
 
         /// <summary>
@@ -41,10 +42,13 @@ namespace Photo_Based_Encryption
             TargetFilePath = null;
         }
 
-
+        /// <summary>
+        /// Selects the photo to be used for encryption seeding.
+        /// </summary>
+        /// <returns></returns>
         public async Task LoadPhotoAsync()
         {
-            // Loads the photo into a temporary Bitmap
+            // Stores the file path selected by the user.
             string loadedPath = PhotoLoader.FileDialog();
 
             if (loadedPath == null)
@@ -57,6 +61,7 @@ namespace Photo_Based_Encryption
             StatusText = "Analyzing image...";
             // Create a bitmap of the image file to inspect.
             Bitmap loadedPhoto = new Bitmap(loadedPath);
+            // Inspect the image.
             PhotoResult result = await PhotoLoader.InspectAsync(loadedPhoto);
 
             // If the image passes inspection it is assigned else an error message is returned.
@@ -75,7 +80,9 @@ namespace Photo_Based_Encryption
             ImagePath = null;
         }
 
-
+        /// <summary>
+        /// Selects the path of the file to be encrypted.
+        /// </summary>
         public void LoadTargetFile()
         {
             // Resets target file path
@@ -91,6 +98,9 @@ namespace Photo_Based_Encryption
             TargetFilePath = openFileDialog.FileName;
         }
 
+        /// <summary>
+        /// Calls the file encryption.
+        /// </summary>
         public void Encrypt()
         {
             Bitmap bitmap = new Bitmap(ImagePath);

@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace Photo_Based_Encryption
 {
+    /// <summary>
+    /// Performs photo loading operations.
+    /// </summary>
     static class PhotoLoader
     {
         /// <summary>

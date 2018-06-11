@@ -22,18 +22,14 @@ namespace Photo_Based_Encryption
         /// <returns></returns>
         public static bool ColorCount(Bitmap image, int threshold)
         {
+            // Create a list to store the color values.
             List<Color> imageColors = new List<Color>();
-
-            int countRow = 0;
-            int countCol = 0;
-            
+         
             // Iterate through all the pixels in the image until the threshold is reached.
             for (int row = 0; row < image.Height; row++)
             {
-                countRow = row;
                 for (int column = 0; column < image.Width; column++)
                 {
-                    countCol = column;
                     // Create an array with the RGB values for the current pixel.
                     byte[] rgbValues = GetRGB(image, column, row);
                     // Creates a new color using the RGB pixel values.
@@ -53,9 +49,9 @@ namespace Photo_Based_Encryption
         }
 
         /// <summary>
-        /// 
+        /// Returns an array of random pixel values from an image.
         /// </summary>
-        /// <param name="bitmap"></param>
+        /// <param name="bitmap">The image to search for pixel values.</param>
         /// <returns></returns>
         public static byte[] GetPixelKey(Bitmap bitmap)
         {
@@ -89,9 +85,9 @@ namespace Photo_Based_Encryption
         /// <summary>
         /// Returns an array of bytes with the RGB values for the specified pixel. 
         /// </summary>
-        /// <param name="bitmap"></param>
-        /// <param name="row"></param>
-        /// <param name="column"></param>
+        /// <param name="bitmap">The image.</param>
+        /// <param name="x">The x value of the pixel.</param>
+        /// <param name="y">The y value of the pixel.</param>
         /// <returns></returns>
         private static byte[] GetRGB(Bitmap bitmap, int x, int y)
         {
