@@ -37,7 +37,7 @@ namespace Photo_Based_Encryption
                 return PhotoResult.FailedSize;
 
             // Checks the image to see if it contains enough different color values to reach the specified threshold.
-            bool passComplexity = await Task.Run(() => PixelReader.ColorCount(image, 10));
+            bool passComplexity = await Task.Run(() => PixelReader.ColorCount(image, 100));
 
             if (!passComplexity)
                 return PhotoResult.FailedComplexity;

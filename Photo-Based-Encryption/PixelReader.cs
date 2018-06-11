@@ -52,7 +52,11 @@ namespace Photo_Based_Encryption
             return false;
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bitmap"></param>
+        /// <returns></returns>
         public static byte[] GetPixelKey(Bitmap bitmap)
         {
             Random rand = new Random();
@@ -62,14 +66,21 @@ namespace Photo_Based_Encryption
             // Fill the key with random pixel values.
             for(int i =0; i < key.Length; i++)
             {
-                // Selects a random row of pixels.
-                int row = rand.Next(bitmap.Height);
-                // Selects a random column of pixels.
-                int column = rand.Next(bitmap.Width);
-                // Returns the rgb values.
-                byte[] rgb = GetRGB(bitmap, column, row);
+                byte[] rgb = new byte[3];
+                // Selects a new pixel if rgb values are equal to prevent excessive 0 and 255 values from black and white pixels.
+                do
+                {
+                    // Selects a random row of pixels.
+                    int row = rand.Next(bitmap.Height);
+                    // Selects a random column of pixels.
+                    int column = rand.Next(bitmap.Width);
+                    // Returns the rgb values.
+                    rgb = GetRGB(bitmap, column, row);
+                }
+                while (rgb[0] == rgb[1] && rgb[0] == rgb[2]);
+                
                 // Select the red green or blue value at random and add to the key.
-                key[i] = rgb[rand.Next(2)];
+                key[i] = rgb[rand.Next(3)];
             }
 
             return key;
