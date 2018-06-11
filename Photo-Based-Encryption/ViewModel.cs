@@ -16,8 +16,6 @@ namespace Photo_Based_Encryption
     {
         public event PropertyChangedEventHandler PropertyChanged = (sender, e) => { };
 
-        private PhotoLoader photoLoader;
-
         /// <summary>
         /// The file path for the seed image.
         /// </summary>
@@ -38,7 +36,6 @@ namespace Photo_Based_Encryption
         /// </summary>
         public ViewModel()
         {
-            photoLoader = new PhotoLoader();
             StatusText = "Please select a seed image for encryption.";
             ImagePath = null;
             TargetFilePath = null;
@@ -48,7 +45,7 @@ namespace Photo_Based_Encryption
         public async Task LoadPhotoAsync()
         {
             // Loads the photo into a temporary Bitmap
-            string loadedPath = photoLoader.FileDialog();
+            string loadedPath = PhotoLoader.FileDialog();
 
             if (loadedPath == null)
             {
@@ -60,7 +57,7 @@ namespace Photo_Based_Encryption
             StatusText = "Analyzing image...";
             // Create a bitmap of the image file to inspect.
             Bitmap loadedPhoto = new Bitmap(loadedPath);
-            PhotoResult result = await photoLoader.InspectAsync(loadedPhoto);
+            PhotoResult result = await PhotoLoader.InspectAsync(loadedPhoto);
 
             // If the image passes inspection it is assigned else an error message is returned.
             if (result == PhotoResult.Approved)

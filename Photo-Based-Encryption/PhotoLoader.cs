@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 
 namespace Photo_Based_Encryption
 {
-    class PhotoLoader
+    static class PhotoLoader
     {
         /// <summary>
         /// Opens the File Dialog to select the seed image. Returns the path of the selected image.
         /// </summary>
-        public string FileDialog()
+        public static string FileDialog()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
@@ -30,7 +30,7 @@ namespace Photo_Based_Encryption
         /// </summary>
         /// <param name="image">The image to inspect.</param>
         /// <returns></returns>
-        public async Task<PhotoResult> InspectAsync(Bitmap image)
+        public static async Task<PhotoResult> InspectAsync(Bitmap image)
         {        
             // The image fails if it is less than 100x100 pixels.
             if (image.Width < 100 || image.Height < 100)
