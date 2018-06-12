@@ -34,6 +34,17 @@ namespace Photo_Based_Encryption
         public string StatusText { get; set; }
 
         /// <summary>
+        /// Bound bool that controls whether the encryption button is enabled.
+        /// </summary>
+        public bool ReadyToEncrypt
+        {
+            get
+            {
+                return ImagePath != null && TargetFilePath != null;
+            }
+        }
+
+        /// <summary>
         /// Default constructor.
         /// </summary>
         public ViewModel()
@@ -104,15 +115,9 @@ namespace Photo_Based_Encryption
         /// </summary>
         public void Encrypt(string password)
         {
-            // Checks if the conditions to encrypt files have been met.
-            // Missing approved photo.
-            if (ImagePath == null)
-                MessageBox.Show("An approved seed image is required for file encryption.");
-            // Missing file to encrypt.
-            else if (TargetFilePath == null)
-                MessageBox.Show("Please select a file to encrypt.");
-            // Missing a password
-            else if (password == "" || password == null)
+
+            // Missing password.
+            if (password == "" || password == null)
                 MessageBox.Show("Please enter a password.");
             // All requirements are met.
             else
