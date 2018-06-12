@@ -48,7 +48,7 @@
                     <ColumnDefinition Width="3*"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Enter a password: " Grid.Column="0"/>
-                <PasswordBox x:Name="pwBox" Grid.Column="1"/>
+                <PasswordBox x:Name="pwBox" PasswordChanged="pwBox_PasswordChanged"  Grid.Column="1"/>
             </Grid>
             
             <!-- Encrypt Button -->

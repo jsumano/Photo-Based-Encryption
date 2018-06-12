@@ -34,15 +34,19 @@ namespace Photo_Based_Encryption
         public string StatusText { get; set; }
 
         /// <summary>
-        /// Bound bool that controls whether the encryption button is enabled.
+        /// Bound bool that controls whether the encryption button is enabled. Returns true when all the conditions for file
+        /// encryption have been met.
         /// </summary>
         public bool ReadyToEncrypt
         {
             get
             {
-                return ImagePath != null && TargetFilePath != null;
+                return ImagePath != null && TargetFilePath != null && 
+                    Passcode != "" && Passcode != null;
             }
         }
+
+        public string Passcode { private get; set; }
 
         /// <summary>
         /// Default constructor.
@@ -113,18 +117,10 @@ namespace Photo_Based_Encryption
         /// <summary>
         /// Calls the file encryption.
         /// </summary>
-        public void Encrypt(string password)
+        public void Encrypt()
         {
-
-            // Missing password.
-            if (password == "" || password == null)
-                MessageBox.Show("Please enter a password.");
-            // All requirements are met.
-            else
-            {
-                Encryption encrypt = new Encryption();
-                encrypt.CallEncrypt(TargetFilePath, password, ImagePath);
-            }
+            Encryption encryption = new Encryption();
+            encryption.Encrypt(TargetFilePath, Passcode, ImagePath);
         }
     }
 }
