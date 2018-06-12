@@ -7,6 +7,7 @@ using Microsoft.Win32;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Photo_Based_Encryption
 {
@@ -101,11 +102,24 @@ namespace Photo_Based_Encryption
         /// <summary>
         /// Calls the file encryption.
         /// </summary>
-        public void Encrypt()
+        public void Encrypt(string password)
         {
-            string password = "";
-            Encryption encrypt = new Encryption();
-            encrypt.CallEncrypt(TargetFilePath, password, ImagePath);
+            // Checks if the conditions to encrypt files have been met.
+            // Missing approved photo.
+            if (ImagePath == null)
+                MessageBox.Show("An approved seed image is required for file encryption.");
+            // Missing file to encrypt.
+            else if (TargetFilePath == null)
+                MessageBox.Show("Please select a file to encrypt.");
+            // Missing a password
+            else if (password == "" || password == null)
+                MessageBox.Show("Please enter a password.");
+            // All requirements are met.
+            else
+            {
+                Encryption encrypt = new Encryption();
+                encrypt.CallEncrypt(TargetFilePath, password, ImagePath);
+            }
         }
     }
 }

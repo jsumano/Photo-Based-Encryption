@@ -43,7 +43,7 @@ namespace Photo_Based_Encryption
 
         private void EncryptButton_Click(object sender, RoutedEventArgs e)
         {
-            viewModel.Encrypt();
+            viewModel.Encrypt(pwBox.Password);
         }
 
     }
