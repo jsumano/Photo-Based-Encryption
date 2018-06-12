@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Photo_Based_Encryption
 {
-    enum EncryptionStatus
+    public enum EncryptionStatus
     {
         Idle,
         Encrypting,

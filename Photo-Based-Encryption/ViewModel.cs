@@ -42,11 +42,19 @@ namespace Photo_Based_Encryption
             get
             {
                 return ImagePath != null && TargetFilePath != null && 
-                    Passcode != "" && Passcode != null;
+                    Passcode != "" && Passcode != null && CryptoStatus == EncryptionStatus.Idle;
             }
         }
 
+        /// <summary>
+        /// The password entered by the user.
+        /// </summary>
         public string Passcode { private get; set; }
+
+        /// <summary>
+        /// The current encryption status.
+        /// </summary>
+        public EncryptionStatus CryptoStatus { get; set; }
 
         /// <summary>
         /// Default constructor.
@@ -56,6 +64,7 @@ namespace Photo_Based_Encryption
             StatusText = "Please select a seed image for encryption.";
             ImagePath = null;
             TargetFilePath = null;
+            CryptoStatus = EncryptionStatus.Idle;
         }
 
         /// <summary>
@@ -119,6 +128,7 @@ namespace Photo_Based_Encryption
         /// </summary>
         public void Encrypt()
         {
+            CryptoStatus = EncryptionStatus.Encrypting;
             Encryption encryption = new Encryption();
             encryption.Encrypt(TargetFilePath, Passcode, ImagePath);
         }
