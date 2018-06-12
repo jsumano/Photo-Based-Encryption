@@ -73,14 +73,14 @@ namespace Photo_Based_Encryption
         /// <returns></returns>
         public async Task LoadPhotoAsync()
         {
+            // Reset the image path.
+            ImagePath = null;
+            
             // Stores the file path selected by the user.
             string loadedPath = PhotoLoader.FileDialog();
 
             if (loadedPath == null)
-            {
-                ImagePath = null;
                 return;
-            }
 
             // Inspects the photo for size and complexity
             StatusText = "Analyzing image...";
@@ -126,11 +126,13 @@ namespace Photo_Based_Encryption
         /// <summary>
         /// Calls the file encryption.
         /// </summary>
-        public void Encrypt()
+        public async Task EncryptAsync()
         {
             CryptoStatus = EncryptionStatus.Encrypting;
             Encryption encryption = new Encryption();
-            encryption.Encrypt(TargetFilePath, Passcode, ImagePath);
+            await Task.Run(()=>encryption.Encrypt(TargetFilePath, Passcode, ImagePath));
+            await Task.Delay(3000);
+            CryptoStatus = EncryptionStatus.Idle;
         }
     }
 }
