@@ -32,6 +32,13 @@ namespace Photo_Based_Encryption
             aes.KeySize = 256;
             // Set the padding mode to PKCS7 which pads using bytes equal to the total number of padding bytes.
             aes.Padding = PaddingMode.PKCS7;
+
+            // Append the salt to the password and hash 5000 times.
+            var key = new Rfc2898DeriveBytes(passwordBytes, salt, 5000);
+            // Generate the key using the GetBytes method to return pseudo-random key bytes.
+            aes.Key = key.GetBytes(aes.KeySize / 8);
+            // Set the initialization vector.
+            aes.IV = key.GetBytes(aes.BlockSize / 8);
         }
     }
 }
