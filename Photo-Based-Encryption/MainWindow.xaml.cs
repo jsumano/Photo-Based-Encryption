@@ -48,10 +48,18 @@ namespace Photo_Based_Encryption
             LoadImageButton.IsEnabled = false;
             LoadFiletoEncryptButton.IsEnabled = false;
             pwBox.IsEnabled = false;
+            EncryptButton.Content = "Encrypting...";
+
             await viewModel.EncryptAsync();
+
+            // Reset the UI.
             LoadImageButton.IsEnabled = true;
             LoadFiletoEncryptButton.IsEnabled = true;
             pwBox.IsEnabled = true;
+            pwBox.Password = "";
+            EncryptButton.Content = "Encrypt";
+            viewModel.ImagePath = "";
+            viewModel.TargetFilePath = "";
         }
 
         private void pwBox_PasswordChanged(object sender, RoutedEventArgs e)

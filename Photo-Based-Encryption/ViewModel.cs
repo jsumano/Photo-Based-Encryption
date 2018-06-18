@@ -129,10 +129,14 @@ namespace Photo_Based_Encryption
         public async Task EncryptAsync()
         {
             CryptoStatus = EncryptionStatus.Encrypting;
+            StatusText = "Encrypting...";
+
             Encryption encryption = new Encryption();
             await Task.Run(()=>encryption.Encrypt(TargetFilePath, Passcode, ImagePath));
-            await Task.Delay(3000);
+
+            // Reset statuses once completed.
             CryptoStatus = EncryptionStatus.Idle;
+            StatusText = "Encryption Complete.";
         }
     }
 }
