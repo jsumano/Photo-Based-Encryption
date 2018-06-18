@@ -32,6 +32,11 @@ namespace Photo_Based_Encryption
                 {
                     // Create an array with the RGB values for the current pixel.
                     byte[] rgbValues = GetRGB(image, column, row);
+
+                    // Skips the pixel if the RGB values are equal to filter out grayscale images.
+                    if (rgbValues[0] == rgbValues[1] && rgbValues[0] == rgbValues[2])
+                        continue;
+
                     // Creates a new color using the RGB pixel values.
                     Color color = new Color();
                     color = Color.FromArgb(rgbValues[0], rgbValues[1], rgbValues[2]);
@@ -63,7 +68,7 @@ namespace Photo_Based_Encryption
             for(int i =0; i < key.Length; i++)
             {
                 byte[] rgb = new byte[3];
-                // Selects a new pixel if rgb values are equal to prevent excessive 0 and 255 values from black and white pixels.
+                // Selects a new pixel if rgb values are equal to filter out grayscale.
                 do
                 {
                     // Selects a random row of pixels.
