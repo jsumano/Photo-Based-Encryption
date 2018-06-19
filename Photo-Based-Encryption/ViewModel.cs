@@ -7,6 +7,7 @@ using Microsoft.Win32;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Photo_Based_Encryption
 {
@@ -14,9 +15,8 @@ namespace Photo_Based_Encryption
     [AddINotifyPropertyChangedInterface]
     public class ViewModel : INotifyPropertyChanged
     {
+       
         public event PropertyChangedEventHandler PropertyChanged = (sender, e) => { };
-
-        private PhotoLoader photoLoader;
 
         /// <summary>
         /// The file path for the seed image.
@@ -33,31 +33,61 @@ namespace Photo_Based_Encryption
         /// </summary>
         public string StatusText { get; set; }
 
+        /// <summary>
+        /// Bound bool that controls whether the encryption button is enabled. Returns true when all the conditions for file
+        /// encryption have been met.
+        /// </summary>
+        public bool ReadyToEncrypt
+        {
+            get
+            {
+                return ImagePath != null && TargetFilePath != null && 
+                    Passcode != "" && Passcode != null && CryptoStatus == EncryptionStatus.Idle;
+            }
+        }
+
+        /// <summary>
+        /// The password entered by the user.
+        /// </summary>
+        public string Passcode { private get; set; }
+
+        /// <summary>
+        /// The current encryption status.
+        /// </summary>
+        public EncryptionStatus CryptoStatus { get; set; }
+
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
         public ViewModel()
         {
-            photoLoader = new PhotoLoader();
             StatusText = "Please select a seed image for encryption.";
             ImagePath = null;
             TargetFilePath = null;
+            CryptoStatus = EncryptionStatus.Idle;
         }
 
-
-        public void LoadPhoto()
+        /// <summary>
+        /// Selects the photo to be used for encryption seeding.
+        /// </summary>
+        /// <returns></returns>
+        public async Task LoadPhotoAsync()
         {
-            // Loads the photo into a temporary Bitmap
-            string loadedPath = photoLoader.FileDialog();
+            // Reset the image path.
+            ImagePath = null;
+            
+            // Stores the file path selected by the user.
+            string loadedPath = PhotoLoader.FileDialog();
 
             if (loadedPath == null)
-            {
-                ImagePath = null;
                 return;
-            }
 
             // Inspects the photo for size and complexity
             StatusText = "Analyzing image...";
             // Create a bitmap of the image file to inspect.
             Bitmap loadedPhoto = new Bitmap(loadedPath);
-            PhotoResult result = photoLoader.Inspect(loadedPhoto);
+            // Inspect the image.
+            PhotoResult result = await PhotoLoader.InspectAsync(loadedPhoto);
 
             // If the image passes inspection it is assigned else an error message is returned.
             if (result == PhotoResult.Approved)
@@ -75,7 +105,9 @@ namespace Photo_Based_Encryption
             ImagePath = null;
         }
 
-
+        /// <summary>
+        /// Selects the path of the file to be encrypted.
+        /// </summary>
         public void LoadTargetFile()
         {
             // Resets target file path
@@ -91,9 +123,20 @@ namespace Photo_Based_Encryption
             TargetFilePath = openFileDialog.FileName;
         }
 
-        public void Encrypt()
+        /// <summary>
+        /// Calls the file encryption.
+        /// </summary>
+        public async Task EncryptAsync()
         {
+            CryptoStatus = EncryptionStatus.Encrypting;
+            StatusText = "Encrypting...";
 
+            Encryption encryption = new Encryption();
+            await Task.Run(()=>encryption.Encrypt(TargetFilePath, Passcode, ImagePath));
+
+            // Reset statuses once completed.
+            CryptoStatus = EncryptionStatus.Idle;
+            StatusText = "Encryption Complete.";
         }
     }
 }
