@@ -10,6 +10,7 @@
 
         <StackPanel>
 
+            <!--Encryption-->
             <TabControl>
                 <TabItem Header="Encrypt">
                     <StackPanel>
@@ -41,7 +42,7 @@
                             </Grid.ColumnDefinitions>
 
                             <!-- Select File to be Encrypted Textbox-->
-                            <TextBox Text="{Binding TargetFilePath}" IsReadOnly="True" Padding="2" Grid.Column="0"/>
+                            <TextBox Text="{Binding EncryptFilePath}" IsReadOnly="True" Padding="2" Grid.Column="0"/>
                             <Button x:Name="LoadFiletoEncryptButton" Click="LoadFiletoEncryptButton_Click" Content="Select File" Grid.Column="1"/>
                         </Grid>
 
@@ -52,7 +53,7 @@
                                 <ColumnDefinition Width="3*"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="Enter a password: " Grid.Column="0"/>
-                            <PasswordBox x:Name="pwBox" PasswordChanged="pwBox_PasswordChanged"  Grid.Column="1"/>
+                            <PasswordBox x:Name="EncryptionPasswordbox" PasswordChanged="EncryptionPasswordbox_PasswordChanged"  Grid.Column="1"/>
                         </Grid>
 
                         <!-- Encrypt Button -->
@@ -61,6 +62,7 @@
                     </StackPanel>
                 </TabItem>
 
+                <!--Decryption-->
                 <TabItem Header="Decrypt">
                     <StackPanel>
 
@@ -73,7 +75,7 @@
                             </Grid.ColumnDefinitions>
 
                             <!-- Select File to decrypt Textbox-->
-                            <TextBox Text="Not set" IsReadOnly="True" Padding="2" Grid.Column="0"/>
+                            <TextBox Text="{Binding DecryptFilePath}" IsReadOnly="True" Padding="2" Grid.Column="0"/>
                             <Button x:Name="LoadFiletoDecryptButton" Click="LoadFiletoDecryptButton_Click" Content="Select File" Grid.Column="1"/>
                         </Grid>
 
@@ -84,11 +86,11 @@
                                 <ColumnDefinition Width="3*"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="Enter a password: " Grid.Column="0"/>
-                            <PasswordBox x:Name="DecryptPasswordbox" PasswordChanged="DecryptPasswordbox_PasswordChanged"  Grid.Column="1"/>
+                            <PasswordBox x:Name="DecryptPasswordbox" PasswordChanged="DecryptPasswordbox_PasswordChanged" Grid.Column="1"/>
                         </Grid>
 
                         <!-- Decrypt Button -->
-                        <Button x:Name="DecryptButton" Click="DecryptButton_Click" Content="Decrypt" Margin="0 10"/>
+                        <Button x:Name="DecryptButton" Click="DecryptButton_Click" IsEnabled="{Binding ReadyToDecrypt}" Content="Decrypt" Margin="0 10"/>
 
                     </StackPanel>
                 </TabItem>
