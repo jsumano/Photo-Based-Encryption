@@ -51,6 +51,7 @@ namespace Photo_Based_Encryption
             EncryptButton.Content = "Encrypting...";
 
             await viewModel.EncryptAsync();
+            MessageBox.Show("Encryption complete!");
 
             // Reset the UI.
             LoadImageButton.IsEnabled = true;
@@ -58,6 +59,7 @@ namespace Photo_Based_Encryption
             pwBox.IsEnabled = true;
             pwBox.Password = "";
             EncryptButton.Content = "Encrypt";
+            viewModel.StatusText = "Please select a seed image for encryption.";
             viewModel.ImagePath = "";
             viewModel.TargetFilePath = "";
         }

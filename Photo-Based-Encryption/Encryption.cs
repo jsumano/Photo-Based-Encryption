@@ -118,7 +118,7 @@ namespace Photo_Based_Encryption
 
             CryptoStream cs = new CryptoStream(fsCrypt, aes.CreateDecryptor(), CryptoStreamMode.Read);
 
-            // Trims the .aes extension off the file name.
+            // Trim the .aes extension off the file name.
             string outputPath = "";
             for (int i = 0; i < inputFile.Length - 4; i++)
                 outputPath += inputFile[i];

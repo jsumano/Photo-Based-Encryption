@@ -5,54 +5,68 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Photo_Based_Encryption"
         mc:Ignorable="d"
-        Title="Photo-Based Encryption" Height="675" Width="525">
+        Title="Photo-Based Encryption" Height="700" Width="525">
     <Border Padding="10">
 
         <StackPanel>
-            
-            <!-- Load Seed Image File-->
-            <TextBlock Text="Load Seed Image File" FontWeight="Bold" Margin="0 0 0 2"/>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="3*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
 
-                <!-- Seed Image Filename Textbox-->
-                <TextBox Text="{Binding ImagePath}" IsReadOnly="True" Padding="2" Grid.Column="0"/>
-                <Button x:Name="LoadImageButton" Click="LoadImageButton_Click" Content="Load Image" Grid.Column="1"/>
-            </Grid>
-            
-            <!-- Image to be Analyzed -->
-            <TextBlock x:Name="ImageStatusText" Text="{Binding StatusText}" Margin="0 5" TextWrapping="Wrap" Height="40"/>
-            <Image Source="{Binding ImagePath}" Height="400"/>
+            <TabControl>
+                <TabItem Header="Encrypt">
+                    <StackPanel>
+                        
+                        <!-- Load Seed Image File-->
+                        <TextBlock Text="Load Seed Image File" FontWeight="Bold" Margin="0 0 0 2"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Seed Image Filename Textbox-->
+                            <TextBox Text="{Binding ImagePath}" IsReadOnly="True" Padding="2" Grid.Column="0"/>
+                            <Button x:Name="LoadImageButton" Click="LoadImageButton_Click" Content="Load Image" Grid.Column="1"/>
+                        </Grid>
+
+                        <!-- Image to be Analyzed -->
+                        <TextBlock x:Name="ImageStatusText" Text="{Binding StatusText}" Margin="0 5" TextWrapping="Wrap" Height="40"/>
+                        <Image Source="{Binding ImagePath}" Height="400"/>
 
 
-            <!-- Select file to be encrypted -->
-            <TextBlock Text="Select file to be encrypyted." FontWeight="Bold" Margin="10"/>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="3*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+                        <!-- Select file to be encrypted -->
+                        <TextBlock Text="Select file to be encrypyted." FontWeight="Bold" Margin="10"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
 
-                <!-- Select File to be Encrypted Textbox-->
-                <TextBox Text="{Binding TargetFilePath}" IsReadOnly="True" Padding="2" Grid.Column="0"/>
-                <Button x:Name="LoadFiletoEncryptButton" Click="LoadFiletoEncryptButton_Click" Content="Select File" Grid.Column="1"/>
-            </Grid>
-            
-            <!--Password-->
-            <Grid Margin="0 10 0 0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="3*"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="Enter a password: " Grid.Column="0"/>
-                <PasswordBox x:Name="pwBox" PasswordChanged="pwBox_PasswordChanged"  Grid.Column="1"/>
-            </Grid>
-            
-            <!-- Encrypt Button -->
-            <Button x:Name="EncryptButton" Click="EncryptButton_Click" IsEnabled="{Binding ReadyToEncrypt}" Content="Encrypt" Margin="0 10"/>
+                            <!-- Select File to be Encrypted Textbox-->
+                            <TextBox Text="{Binding TargetFilePath}" IsReadOnly="True" Padding="2" Grid.Column="0"/>
+                            <Button x:Name="LoadFiletoEncryptButton" Click="LoadFiletoEncryptButton_Click" Content="Select File" Grid.Column="1"/>
+                        </Grid>
+
+                        <!--Password-->
+                        <Grid Margin="0 10 0 0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="3*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Enter a password: " Grid.Column="0"/>
+                            <PasswordBox x:Name="pwBox" PasswordChanged="pwBox_PasswordChanged"  Grid.Column="1"/>
+                        </Grid>
+
+                        <!-- Encrypt Button -->
+                        <Button x:Name="EncryptButton" Click="EncryptButton_Click" IsEnabled="{Binding ReadyToEncrypt}" Content="Encrypt" Margin="0 10"/>
+                    
+                    </StackPanel>
+                </TabItem>
+
+                <TabItem Header="Decrypt">
+                    <StackPanel>
+
+                    </StackPanel>
+                </TabItem>
+            </TabControl>
 
         </StackPanel>
     </Border>
