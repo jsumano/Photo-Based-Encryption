@@ -33,7 +33,7 @@
 
 
                         <!-- Select file to be encrypted -->
-                        <TextBlock Text="Select file to be encrypyted." FontWeight="Bold" Margin="10"/>
+                        <TextBlock Text="Select file to be encrypyted." FontWeight="Bold" Margin="0 10"/>
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="3*"/>
@@ -63,6 +63,32 @@
 
                 <TabItem Header="Decrypt">
                     <StackPanel>
+
+                        <!-- Select file to decrypt -->
+                        <TextBlock Text="Select file to decrypt." FontWeight="Bold" Margin="0 10"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Select File to decrypt Textbox-->
+                            <TextBox Text="Not set" IsReadOnly="True" Padding="2" Grid.Column="0"/>
+                            <Button x:Name="LoadFiletoDecryptButton" Click="LoadFiletoDecryptButton_Click" Content="Select File" Grid.Column="1"/>
+                        </Grid>
+
+                        <!--Decrypt Password-->
+                        <Grid Margin="0 10 0 0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="3*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Enter a password: " Grid.Column="0"/>
+                            <PasswordBox x:Name="DecryptPasswordbox" PasswordChanged="DecryptPasswordbox_PasswordChanged"  Grid.Column="1"/>
+                        </Grid>
+
+                        <!-- Decrypt Button -->
+                        <Button x:Name="DecryptButton" Click="DecryptButton_Click" Content="Decrypt" Margin="0 10"/>
 
                     </StackPanel>
                 </TabItem>

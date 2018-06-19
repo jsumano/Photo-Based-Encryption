@@ -68,5 +68,20 @@ namespace Photo_Based_Encryption
         {
             viewModel.Passcode = pwBox.Password;
         }
+
+        private void LoadFiletoDecryptButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void DecryptPasswordbox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void DecryptButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
