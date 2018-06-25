@@ -18,6 +18,7 @@ namespace Photo_Based_Encryption
        
         public event PropertyChangedEventHandler PropertyChanged = (sender, e) => { };
 
+        #region Public Properties
         /// <summary>
         /// The file path for the seed image.
         /// </summary>
@@ -26,7 +27,12 @@ namespace Photo_Based_Encryption
         /// <summary>
         /// The file path of the file to encrypt.
         /// </summary>
-        public string TargetFilePath { get; set; }
+        public string EncryptFilePath { get; set; }
+
+        /// <summary>
+        /// The file path of the file to decrypt.
+        /// </summary>
+        public string DecryptFilePath { get; set; }
 
         /// <summary>
         /// A description of the current status.
@@ -41,20 +47,39 @@ namespace Photo_Based_Encryption
         {
             get
             {
-                return ImagePath != null && TargetFilePath != null && 
-                    Passcode != "" && Passcode != null && CryptoStatus == EncryptionStatus.Idle;
+                return ImagePath != null && EncryptFilePath != null && 
+                    EncryptPasscode != "" && EncryptPasscode != null && CryptoStatus == EncryptionStatus.Idle;
             }
         }
 
         /// <summary>
-        /// The password entered by the user.
+        /// Bound bool that controls whether the decrypt button is enabled. Returns true when all the conditions for file
+        /// decryption have been met.
         /// </summary>
-        public string Passcode { private get; set; }
+        public bool ReadyToDecrypt
+        {
+            get
+            {
+                return DecryptFilePath != null && DecryptPasscode != "" && DecryptPasscode != null && CryptoStatus == EncryptionStatus.Idle;
+            }
+        }
+
+        /// <summary>
+        /// The password entered by the user for encryption.
+        /// </summary>
+        public string EncryptPasscode { private get; set; }
+
+        /// <summary>
+        /// The password entered by the user for encryption.
+        /// </summary>
+        public string DecryptPasscode { private get; set; }
 
         /// <summary>
         /// The current encryption status.
         /// </summary>
         public EncryptionStatus CryptoStatus { get; set; }
+
+        #endregion
 
         /// <summary>
         /// Default constructor.
@@ -63,7 +88,8 @@ namespace Photo_Based_Encryption
         {
             StatusText = "Please select a seed image for encryption.";
             ImagePath = null;
-            TargetFilePath = null;
+            EncryptFilePath = null;
+            DecryptFilePath = null;
             CryptoStatus = EncryptionStatus.Idle;
         }
 
@@ -108,10 +134,10 @@ namespace Photo_Based_Encryption
         /// <summary>
         /// Selects the path of the file to be encrypted.
         /// </summary>
-        public void LoadTargetFile()
+        public void LoadEncryptTargetFile()
         {
             // Resets target file path
-            TargetFilePath = null;
+            EncryptFilePath = null;
 
             // Instantiates file dialog.
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -120,7 +146,26 @@ namespace Photo_Based_Encryption
                 return;
 
             // Set the path.
-            TargetFilePath = openFileDialog.FileName;
+            EncryptFilePath = openFileDialog.FileName;
+        }
+
+        /// <summary>
+        /// Selects the path of the file to be decrypted.
+        /// </summary>
+        public void LoadDecryptTargetFile()
+        {
+            // Resets target file path
+            DecryptFilePath = null;
+
+            // Instantiates file dialog.
+            OpenFileDialog openFileDialog = new OpenFileDialog() { Filter = "AES (*.aes)|*.aes" };
+
+            // Returns if the user does not select a file.
+            if (openFileDialog.ShowDialog() != true)
+                return;
+
+            // Set the path.
+            DecryptFilePath = openFileDialog.FileName;
         }
 
         /// <summary>
@@ -132,11 +177,25 @@ namespace Photo_Based_Encryption
             StatusText = "Encrypting...";
 
             Encryption encryption = new Encryption();
-            await Task.Run(()=>encryption.Encrypt(TargetFilePath, Passcode, ImagePath));
+            await Task.Run(()=>encryption.Encrypt(EncryptFilePath, EncryptPasscode, ImagePath));
 
             // Reset statuses once completed.
             CryptoStatus = EncryptionStatus.Idle;
             StatusText = "Encryption Complete.";
+        }
+
+        /// <summary>
+        /// Calls the file encryption.
+        /// </summary>
+        public async Task DecryptAsync()
+        {
+            CryptoStatus = EncryptionStatus.Decrypting;
+
+            Encryption encryption = new Encryption();
+            await Task.Run(() => encryption.Decrypt(DecryptFilePath, DecryptPasscode));
+
+            // Reset statuses once completed.
+            CryptoStatus = EncryptionStatus.Idle;
         }
     }
 }

@@ -38,16 +38,15 @@ namespace Photo_Based_Encryption
 
         private void LoadFiletoEncryptButton_Click(object sender, RoutedEventArgs e)
         {
-            viewModel.LoadTargetFile();
+            viewModel.LoadEncryptTargetFile();
         }
 
         private async void EncryptButton_Click(object sender, RoutedEventArgs e)
         {
-            // Disable the other buttons and the passwordbox until the encryption operation is complete.
-            // The encrypt button is handled by a bound bool in the viewmodel.
+            // Disable the buttons and the passwordbox until the encryption operation is complete.
             LoadImageButton.IsEnabled = false;
             LoadFiletoEncryptButton.IsEnabled = false;
-            pwBox.IsEnabled = false;
+            EncryptionPasswordbox.IsEnabled = false;
             EncryptButton.Content = "Encrypting...";
 
             await viewModel.EncryptAsync();
@@ -56,32 +55,44 @@ namespace Photo_Based_Encryption
             // Reset the UI.
             LoadImageButton.IsEnabled = true;
             LoadFiletoEncryptButton.IsEnabled = true;
-            pwBox.IsEnabled = true;
-            pwBox.Password = "";
+            EncryptionPasswordbox.IsEnabled = true;
+            EncryptionPasswordbox.Password = "";
             EncryptButton.Content = "Encrypt";
             viewModel.StatusText = "Please select a seed image for encryption.";
             viewModel.ImagePath = "";
-            viewModel.TargetFilePath = "";
+            viewModel.EncryptFilePath = "";
         }
 
-        private void pwBox_PasswordChanged(object sender, RoutedEventArgs e)
-        {
-            viewModel.Passcode = pwBox.Password;
-        }
 
         private void LoadFiletoDecryptButton_Click(object sender, RoutedEventArgs e)
         {
-
+            viewModel.LoadDecryptTargetFile();
         }
 
         private void DecryptPasswordbox_PasswordChanged(object sender, RoutedEventArgs e)
         {
-
+            viewModel.DecryptPasscode = DecryptPasswordbox.Password;
         }
 
-        private void DecryptButton_Click(object sender, RoutedEventArgs e)
+        private async void DecryptButton_Click(object sender, RoutedEventArgs e)
         {
+            // Disable the buttons and the passwordbox until the decryption operation is complete.
+            DecryptButton.IsEnabled = false;
+            DecryptButton.Content = "Decrypting...";
 
+            await viewModel.DecryptAsync();
+            MessageBox.Show("Decryption complete.");
+
+            // Reset the UI.
+            DecryptButton.IsEnabled = true;
+            DecryptPasswordbox.Password = "";
+            DecryptButton.Content = "Decrypting";
+            viewModel.DecryptFilePath = "";
+        }
+
+        private void EncryptionPasswordbox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            viewModel.EncryptPasscode = EncryptionPasswordbox.Password;
         }
     }
 }
