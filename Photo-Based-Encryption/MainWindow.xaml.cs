@@ -43,8 +43,7 @@ namespace Photo_Based_Encryption
 
         private async void EncryptButton_Click(object sender, RoutedEventArgs e)
         {
-            // Disable the other buttons and the passwordbox until the encryption operation is complete.
-            // The encrypt button is handled by a bound bool in the viewmodel.
+            // Disable the buttons and the passwordbox until the encryption operation is complete.
             LoadImageButton.IsEnabled = false;
             LoadFiletoEncryptButton.IsEnabled = false;
             EncryptionPasswordbox.IsEnabled = false;
@@ -77,7 +76,18 @@ namespace Photo_Based_Encryption
 
         private async void DecryptButton_Click(object sender, RoutedEventArgs e)
         {
+            // Disable the buttons and the passwordbox until the decryption operation is complete.
+            DecryptButton.IsEnabled = false;
+            DecryptButton.Content = "Decrypting...";
+
             await viewModel.DecryptAsync();
+            MessageBox.Show("Decryption complete.");
+
+            // Reset the UI.
+            DecryptButton.IsEnabled = true;
+            DecryptPasswordbox.Password = "";
+            DecryptButton.Content = "Decrypting";
+            viewModel.DecryptFilePath = "";
         }
 
         private void EncryptionPasswordbox_PasswordChanged(object sender, RoutedEventArgs e)

@@ -21,75 +21,51 @@ namespace Photo_Based_Encryption
         public void Encrypt(string targetFile, string password, string imagePath)
         {
             // Generate the salt from random pixel values.
-            Bitmap bitmap = new Bitmap(imagePath);
-            byte[] salt = PixelReader.GetPixelKey(bitmap);
-
-            // Create a file stream for the output file.
-            FileStream fsCrypt = new FileStream(targetFile + ".aes", FileMode.Create);
+            byte[] salt = PixelReader.GetPixelKey(new Bitmap(imagePath));
 
             // Convert password into an array of bytes.
             byte[] passwordBytes = System.Text.Encoding.UTF8.GetBytes(password);
 
-            // Create AES.
-            Aes aes = Aes.Create();
-            aes.BlockSize = 128;
-            // Use the maximum keysize.
-            aes.KeySize = 256;
-            // Set the padding mode to PKCS7 which pads using bytes equal to the total number of padding bytes.
-            aes.Padding = PaddingMode.PKCS7;
+            // Convert file into an array of bytes;
+            byte[] fileBytes = File.ReadAllBytes(targetFile);
 
-            // Append the salt to the password and hash 5000 times.
-            var key = new Rfc2898DeriveBytes(passwordBytes, salt, 5000);
-            // Generate the key using the GetBytes method to return pseudo-random key bytes.
-            aes.Key = key.GetBytes(aes.KeySize / 8);
-            // Set the initialization vector.
-            aes.IV = key.GetBytes(aes.BlockSize / 8);
-            // Set the cipher mode.
-            aes.Mode = CipherMode.CFB;
 
-            // Write the salt to the zero index of the output file.
-            fsCrypt.Write(salt, 0, salt.Length);
-
-            // Create the cryptostream.
-            CryptoStream cryptoStream = new CryptoStream(fsCrypt, aes.CreateEncryptor(), CryptoStreamMode.Write);
-
-            FileStream fsInput = new FileStream(targetFile, FileMode.Open);
-
-            int read;
-            byte[] buffer = new byte[1048576];
-
-            // Write to the cryptostream.
-
-            try
+            using (MemoryStream ms = new MemoryStream())
             {
-                while ((read = cryptoStream.Read(buffer, 0, buffer.Length)) > 0)
+                using (Aes aes = Aes.Create())
                 {
-                    cryptoStream.Write(buffer, 0, read);
+                    aes.KeySize = 256;
+                    aes.BlockSize = 128;
+
+                    var key = new Rfc2898DeriveBytes(passwordBytes, salt, 1000);
+                    aes.Key = key.GetBytes(aes.KeySize / 8);
+                    aes.IV = key.GetBytes(aes.BlockSize / 8);
+                    aes.Padding = PaddingMode.PKCS7;
+                    aes.Mode = CipherMode.CBC;
+
+                    using (CryptoStream cs = new CryptoStream(ms, aes.CreateEncryptor(), CryptoStreamMode.Write))
+                    {
+                        cs.Write(fileBytes, 0, fileBytes.Length);
+                    }
+                    byte[] encryptedBytes = ms.ToArray();
+
+                    // Create an array to store the data to be written.
+                    byte[] data = new byte[salt.Length + encryptedBytes.Length];
+                    // Write the salt to the beginning of the array
+                    for (int i = 0; i < salt.Length; i++)
+                        data[i] = salt[i];
+                    // Write the encrypted bytes after the salt in the array.
+                    for (int j = 0; j < encryptedBytes.Length; j++)
+                        data[j + salt.Length] = encryptedBytes[j];
+
+                    using (FileStream fs = new FileStream(targetFile + ".aes", FileMode.Create))
+                    {
+                        // Write the data to the file.
+                        fs.Write(data, 0, data.Length);
+                    }
                 }
             }
-            catch (CryptographicException ex_CryptographicException)
-            {
-                Console.WriteLine("CryptographicException error: " + ex_CryptographicException.Message);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error: " + ex.Message);
-            }
-            
-            // Close streams.
-            try
-            {
-                cryptoStream.Close();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error by closing CryptoStream: " + ex.Message);
-            }
-            finally
-            {
-                fsCrypt.Close();
-                fsInput.Close();
-            }
+
         }
 
 
@@ -99,64 +75,55 @@ namespace Photo_Based_Encryption
         {
             // Convert password into an array of bytes.
             byte[] passwordBytes = System.Text.Encoding.UTF8.GetBytes(password);
-            // Create a new array with same length as salt to store salt.
-            byte[] salt = new byte[32];
 
-            // Open the encrypted file.
-            FileStream fsCrypt = new FileStream(inputFile, FileMode.Open);
-            // Read the salt into the salt buffer. 
-            fsCrypt.Read(salt, 0, salt.Length);
-
-            // Create the AES with the same settings as the encrypted file.
-            Aes aes = Aes.Create();
-            aes.BlockSize = 128;
-            var key = new Rfc2898DeriveBytes(passwordBytes, salt, 50000);
-            aes.Key = key.GetBytes(aes.KeySize / 8);
-            aes.IV = key.GetBytes(aes.BlockSize / 8);
-            aes.Padding = PaddingMode.PKCS7;
-            aes.Mode = CipherMode.CFB;
-
-            CryptoStream cs = new CryptoStream(fsCrypt, aes.CreateDecryptor(), CryptoStreamMode.Read);
-
-            // Trim the .aes extension off the file name.
-            string outputPath = "";
-            for (int i = 0; i < inputFile.Length - 4; i++)
-                outputPath += inputFile[i];
-
-            FileStream fsOut = new FileStream(outputPath, FileMode.Create);
-
-            int read;
-            byte[] buffer = new byte[1048576];
-
-            try
+            using (MemoryStream ms = new MemoryStream())
             {
-                while ((read = cs.Read(buffer, 0, buffer.Length)) > 0)
+                using (Aes aes = Aes.Create())
                 {
-                    fsOut.Write(buffer, 0, read);
+                    byte[] buffer = File.ReadAllBytes(inputFile);
+                    // Create an array to store the salt
+                    byte[] salt = new byte[32];
+
+                    // Retrieve the salt from the buffer.
+                    for (int i = 0; i < salt.Length; i++)
+                        salt[i] = buffer[i];
+
+                    aes.KeySize = 256;
+                    aes.BlockSize = 128;
+
+                    var key = new Rfc2898DeriveBytes(passwordBytes, salt, 1000);
+                    aes.Key = key.GetBytes(aes.KeySize / 8);
+                    aes.IV = key.GetBytes(aes.BlockSize / 8);
+                    aes.Padding = PaddingMode.PKCS7;
+                    aes.Mode = CipherMode.CBC;
+
+                    // Get the filename.
+                    string[] tokens = inputFile.Split('\\');
+                    string encryptedFileName = tokens[tokens.Length - 1];
+
+                    // Trim the.aes extension off the file name.
+                    string decryptedFileName = "";
+                    for (int i = 0; i < encryptedFileName.Length - 4; i++)
+                        decryptedFileName += encryptedFileName[i];
+
+                    string outputPath = "C:/Users/joeum/Desktop/" + decryptedFileName;
+
+
+                    using (CryptoStream cs = new CryptoStream(ms, aes.CreateDecryptor(), CryptoStreamMode.Write))
+                    {
+                        // Write from the buffer to the memory stream starting after the salt value.
+                        cs.Write(buffer, salt.Length, buffer.Length - salt.Length);
+                    }
+
+                    byte[] decryptedBytes = ms.ToArray();
+
+                    using (FileStream fs = new FileStream(outputPath, FileMode.Create))
+                    {
+                        fs.Write(decryptedBytes, 0, decryptedBytes.Length);
+                    }
                 }
             }
-            catch (CryptographicException ex_CryptographicException)
-            {
-                Console.WriteLine("CryptographicException error: " + ex_CryptographicException.Message);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error: " + ex.Message);
-            }
 
-            try
-            {
-                cs.Close();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error by closing CryptoStream: " + ex.Message);
-            }
-            finally
-            {
-                fsOut.Close();
-                fsCrypt.Close();
-            }
         }
     }
 }

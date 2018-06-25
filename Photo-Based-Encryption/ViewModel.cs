@@ -18,6 +18,7 @@ namespace Photo_Based_Encryption
        
         public event PropertyChangedEventHandler PropertyChanged = (sender, e) => { };
 
+        #region Public Properties
         /// <summary>
         /// The file path for the seed image.
         /// </summary>
@@ -77,6 +78,8 @@ namespace Photo_Based_Encryption
         /// The current encryption status.
         /// </summary>
         public EncryptionStatus CryptoStatus { get; set; }
+
+        #endregion
 
         /// <summary>
         /// Default constructor.
@@ -155,7 +158,8 @@ namespace Photo_Based_Encryption
             DecryptFilePath = null;
 
             // Instantiates file dialog.
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            OpenFileDialog openFileDialog = new OpenFileDialog() { Filter = "AES (*.aes)|*.aes" };
+
             // Returns if the user does not select a file.
             if (openFileDialog.ShowDialog() != true)
                 return;
@@ -186,7 +190,6 @@ namespace Photo_Based_Encryption
         public async Task DecryptAsync()
         {
             CryptoStatus = EncryptionStatus.Decrypting;
-            StatusText = "Encrypting...";
 
             Encryption encryption = new Encryption();
             await Task.Run(() => encryption.Decrypt(DecryptFilePath, DecryptPasscode));
