@@ -79,6 +79,19 @@
                             <Button x:Name="LoadFiletoDecryptButton" Click="LoadFiletoDecryptButton_Click" Content="Select File" Grid.Column="1"/>
                         </Grid>
 
+                        <!-- Select the output directory -->
+                        <TextBlock Text="Select the output directory." FontWeight="Bold" Margin="0 10"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Select destination Textbox-->
+                            <TextBox Text="{Binding DestinationFilePath}" IsReadOnly="True" Padding="2" Grid.Column="0"/>
+                            <Button x:Name="DestinationButton" Click="DestinationButton_Click" Content="Select Destination" Grid.Column="1"/>
+                        </Grid>
+
                         <!--Decrypt Password-->
                         <Grid Margin="0 10 0 0">
                             <Grid.ColumnDefinitions>

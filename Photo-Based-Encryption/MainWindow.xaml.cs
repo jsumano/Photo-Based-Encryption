@@ -94,5 +94,10 @@ namespace Photo_Based_Encryption
         {
             viewModel.EncryptPasscode = EncryptionPasswordbox.Password;
         }
+
+        private void DestinationButton_Click(object sender, RoutedEventArgs e)
+        {
+            viewModel.SelectDestination();
+        }
     }
 }

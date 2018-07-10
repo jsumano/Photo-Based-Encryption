@@ -71,7 +71,7 @@ namespace Photo_Based_Encryption
 
 
 
-        public void Decrypt(string inputFile, string password)
+        public void Decrypt(string inputFile, string password, string destination)
         {
             // Convert password into an array of bytes.
             byte[] passwordBytes = System.Text.Encoding.UTF8.GetBytes(password);
@@ -106,7 +106,8 @@ namespace Photo_Based_Encryption
                     for (int i = 0; i < encryptedFileName.Length - 4; i++)
                         decryptedFileName += encryptedFileName[i];
 
-                    string outputPath = "C:/Users/joeum/Desktop/" + decryptedFileName;
+                    destination = destination.Replace("\\", "/") + "/";
+                    string outputPath = destination + decryptedFileName;
 
 
                     using (CryptoStream cs = new CryptoStream(ms, aes.CreateDecryptor(), CryptoStreamMode.Write))
