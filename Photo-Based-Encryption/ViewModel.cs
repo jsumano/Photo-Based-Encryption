@@ -56,7 +56,7 @@ namespace Photo_Based_Encryption
             get
             {
                 return ImagePath != null && EncryptFilePath != null && 
-                    EncryptPasscode != "" && EncryptPasscode != null && CryptoStatus == EncryptionStatus.Idle;
+                    !String.IsNullOrEmpty(EncryptPasscode) && CryptoStatus == EncryptionStatus.Idle;
             }
         }
 
@@ -68,7 +68,7 @@ namespace Photo_Based_Encryption
         {
             get
             {
-                return DecryptFilePath != null && DecryptPasscode != "" && DecryptPasscode != null && CryptoStatus == EncryptionStatus.Idle;
+                return DecryptFilePath != null && DestinationFilePath != null && !String.IsNullOrEmpty(DecryptPasscode) && CryptoStatus == EncryptionStatus.Idle;
             }
         }
 
