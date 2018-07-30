@@ -4,6 +4,7 @@
     {
         Approved,
         FailedComplexity,
-        FailedSize
+        FailedSize,
+        InvalidFile
     }
 }

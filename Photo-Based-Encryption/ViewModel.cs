@@ -18,7 +18,7 @@ namespace Photo_Based_Encryption
     [AddINotifyPropertyChangedInterface]
     public class ViewModel : INotifyPropertyChanged
     {
-       
+
         public event PropertyChangedEventHandler PropertyChanged = (sender, e) => { };
 
         #region Public Properties
@@ -119,10 +119,7 @@ namespace Photo_Based_Encryption
 
             // Inspects the photo for size and complexity
             StatusText = "Analyzing image...";
-            // Create a bitmap of the image file to inspect.
-            Bitmap loadedPhoto = new Bitmap(loadedPath);
-            // Inspect the image.
-            PhotoResult result = await PhotoLoader.InspectAsync(loadedPhoto);
+            PhotoResult result = await PhotoLoader.InspectAsync(loadedPath);
 
             // If the image passes inspection it is assigned else an error message is returned.
             if (result == PhotoResult.Approved)
@@ -135,6 +132,8 @@ namespace Photo_Based_Encryption
                 StatusText = "The minimum size for a seed image is 100x100. Please select a larger image file.";
             else if (result == PhotoResult.FailedComplexity)
                 StatusText = "This image is not sufficiently complex. Please select an image with a greater range of color values.";
+            else if (result == PhotoResult.InvalidFile)
+                StatusText = "Invalid file or file type.";
 
             // Resets the image path if the image fails inspection.
             ImagePath = null;
