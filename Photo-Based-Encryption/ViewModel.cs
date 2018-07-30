@@ -1,13 +1,16 @@
 ﻿using PropertyChanged;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using Microsoft.Win32;
+using W32 = Microsoft.Win32;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Forms;
+
 
 namespace Photo_Based_Encryption
 {
@@ -15,7 +18,7 @@ namespace Photo_Based_Encryption
     [AddINotifyPropertyChangedInterface]
     public class ViewModel : INotifyPropertyChanged
     {
-       
+
         public event PropertyChangedEventHandler PropertyChanged = (sender, e) => { };
 
         #region Public Properties
@@ -35,6 +38,11 @@ namespace Photo_Based_Encryption
         public string DecryptFilePath { get; set; }
 
         /// <summary>
+        /// The destination file directory for the decrypted file.
+        /// </summary>
+        public string DestinationFilePath { get; set; }
+
+        /// <summary>
         /// A description of the current status.
         /// </summary>
         public string StatusText { get; set; }
@@ -48,7 +56,7 @@ namespace Photo_Based_Encryption
             get
             {
                 return ImagePath != null && EncryptFilePath != null && 
-                    EncryptPasscode != "" && EncryptPasscode != null && CryptoStatus == EncryptionStatus.Idle;
+                    !String.IsNullOrEmpty(EncryptPasscode) && CryptoStatus == EncryptionStatus.Idle;
             }
         }
 
@@ -60,7 +68,7 @@ namespace Photo_Based_Encryption
         {
             get
             {
-                return DecryptFilePath != null && DecryptPasscode != "" && DecryptPasscode != null && CryptoStatus == EncryptionStatus.Idle;
+                return DecryptFilePath != null && DestinationFilePath != null && !String.IsNullOrEmpty(DecryptPasscode) && CryptoStatus == EncryptionStatus.Idle;
             }
         }
 
@@ -90,6 +98,7 @@ namespace Photo_Based_Encryption
             ImagePath = null;
             EncryptFilePath = null;
             DecryptFilePath = null;
+            DestinationFilePath = null;
             CryptoStatus = EncryptionStatus.Idle;
         }
 
@@ -110,10 +119,7 @@ namespace Photo_Based_Encryption
 
             // Inspects the photo for size and complexity
             StatusText = "Analyzing image...";
-            // Create a bitmap of the image file to inspect.
-            Bitmap loadedPhoto = new Bitmap(loadedPath);
-            // Inspect the image.
-            PhotoResult result = await PhotoLoader.InspectAsync(loadedPhoto);
+            PhotoResult result = await PhotoLoader.InspectAsync(loadedPath);
 
             // If the image passes inspection it is assigned else an error message is returned.
             if (result == PhotoResult.Approved)
@@ -126,6 +132,8 @@ namespace Photo_Based_Encryption
                 StatusText = "The minimum size for a seed image is 100x100. Please select a larger image file.";
             else if (result == PhotoResult.FailedComplexity)
                 StatusText = "This image is not sufficiently complex. Please select an image with a greater range of color values.";
+            else if (result == PhotoResult.InvalidFile)
+                StatusText = "Invalid file or file type.";
 
             // Resets the image path if the image fails inspection.
             ImagePath = null;
@@ -140,7 +148,7 @@ namespace Photo_Based_Encryption
             EncryptFilePath = null;
 
             // Instantiates file dialog.
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            W32.OpenFileDialog openFileDialog = new W32.OpenFileDialog();
             // Returns if the user does not select a file.
             if (openFileDialog.ShowDialog() != true)
                 return;
@@ -158,7 +166,7 @@ namespace Photo_Based_Encryption
             DecryptFilePath = null;
 
             // Instantiates file dialog.
-            OpenFileDialog openFileDialog = new OpenFileDialog() { Filter = "AES (*.aes)|*.aes" };
+            W32.OpenFileDialog openFileDialog = new W32.OpenFileDialog() { Filter = "AES (*.aes)|*.aes" };
 
             // Returns if the user does not select a file.
             if (openFileDialog.ShowDialog() != true)
@@ -166,6 +174,23 @@ namespace Photo_Based_Encryption
 
             // Set the path.
             DecryptFilePath = openFileDialog.FileName;
+        }
+
+        /// <summary>
+        /// Selects the destination path for the decrypted output file.
+        /// </summary>
+        public void SelectDestination()
+        {
+            // Resets target file path
+            DestinationFilePath = null;
+
+            using(FolderBrowserDialog fbd = new FolderBrowserDialog())
+            {
+                if(fbd.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+                {
+                    DestinationFilePath = fbd.SelectedPath;
+                }
+            }
         }
 
         /// <summary>
@@ -192,7 +217,7 @@ namespace Photo_Based_Encryption
             CryptoStatus = EncryptionStatus.Decrypting;
 
             Encryption encryption = new Encryption();
-            await Task.Run(() => encryption.Decrypt(DecryptFilePath, DecryptPasscode));
+            await Task.Run(() => encryption.Decrypt(DecryptFilePath, DecryptPasscode, DestinationFilePath));
 
             // Reset statuses once completed.
             CryptoStatus = EncryptionStatus.Idle;

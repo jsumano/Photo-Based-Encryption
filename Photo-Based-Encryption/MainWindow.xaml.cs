@@ -78,6 +78,8 @@ namespace Photo_Based_Encryption
         {
             // Disable the buttons and the passwordbox until the decryption operation is complete.
             DecryptButton.IsEnabled = false;
+            LoadFiletoDecryptButton.IsEnabled = false;
+            DestinationButton.IsEnabled = false;
             DecryptButton.Content = "Decrypting...";
 
             await viewModel.DecryptAsync();
@@ -85,14 +87,22 @@ namespace Photo_Based_Encryption
 
             // Reset the UI.
             DecryptButton.IsEnabled = true;
+            LoadFiletoDecryptButton.IsEnabled = true;
+            DestinationButton.IsEnabled = true;
             DecryptPasswordbox.Password = "";
-            DecryptButton.Content = "Decrypting";
+            DecryptButton.Content = "Decrypt";
             viewModel.DecryptFilePath = "";
+            viewModel.DestinationFilePath = "";
         }
 
         private void EncryptionPasswordbox_PasswordChanged(object sender, RoutedEventArgs e)
         {
             viewModel.EncryptPasscode = EncryptionPasswordbox.Password;
+        }
+
+        private void DestinationButton_Click(object sender, RoutedEventArgs e)
+        {
+            viewModel.SelectDestination();
         }
     }
 }
