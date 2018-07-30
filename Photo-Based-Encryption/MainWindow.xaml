@@ -53,7 +53,7 @@
                                 <ColumnDefinition Width="3*"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="Enter a password: " Grid.Column="0"/>
-                            <PasswordBox x:Name="EncryptionPasswordbox" PasswordChanged="EncryptionPasswordbox_PasswordChanged"  Grid.Column="1"/>
+                            <PasswordBox x:Name="EncryptionPasswordbox" PasswordChanged="EncryptionPasswordbox_PasswordChanged" KeyDown="EncryptionPasswordbox_KeyDown"  Grid.Column="1"/>
                         </Grid>
 
                         <!-- Encrypt Button -->
@@ -99,7 +99,7 @@
                                 <ColumnDefinition Width="3*"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="Enter a password: " Grid.Column="0"/>
-                            <PasswordBox x:Name="DecryptPasswordbox" PasswordChanged="DecryptPasswordbox_PasswordChanged" Grid.Column="1"/>
+                            <PasswordBox x:Name="DecryptPasswordbox" PasswordChanged="DecryptPasswordbox_PasswordChanged" KeyDown="DecryptPasswordbox_KeyDown" Grid.Column="1"/>
                         </Grid>
 
                         <!-- Decrypt Button -->
