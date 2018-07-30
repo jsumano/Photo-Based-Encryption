@@ -28,6 +28,11 @@ namespace Photo_Based_Encryption
             this.DataContext = viewModel;
         }
 
+        public static void Message(string text)
+        {
+            MessageBox.Show(text);
+        }
+
         private async void LoadImageButton_Click(object sender, RoutedEventArgs e)
         {
             // Disable the LoadImageButton until the LoadPhotoAsync method has finished execution.
@@ -82,17 +87,23 @@ namespace Photo_Based_Encryption
             DestinationButton.IsEnabled = false;
             DecryptButton.Content = "Decrypting...";
 
-            await viewModel.DecryptAsync();
-            MessageBox.Show("Decryption complete.");
+            DecryptResult result = await viewModel.DecryptAsync();
+            if (result == DecryptResult.Complete)
+            {
+                MessageBox.Show("Decryption complete.");
+                viewModel.DecryptFilePath = "";
+                viewModel.DestinationFilePath = "";
+            }
+                
+            else
+                MessageBox.Show("Incorrect password. Please enter the password used to encrypt the file.");
 
             // Reset the UI.
-            DecryptButton.IsEnabled = true;
             LoadFiletoDecryptButton.IsEnabled = true;
             DestinationButton.IsEnabled = true;
             DecryptPasswordbox.Password = "";
             DecryptButton.Content = "Decrypt";
-            viewModel.DecryptFilePath = "";
-            viewModel.DestinationFilePath = "";
+
         }
 
         private void EncryptionPasswordbox_PasswordChanged(object sender, RoutedEventArgs e)

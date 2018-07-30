@@ -212,15 +212,18 @@ namespace Photo_Based_Encryption
         /// <summary>
         /// Calls the file encryption.
         /// </summary>
-        public async Task DecryptAsync()
+        public async Task<DecryptResult> DecryptAsync()
         {
             CryptoStatus = EncryptionStatus.Decrypting;
 
             Encryption encryption = new Encryption();
-            await Task.Run(() => encryption.Decrypt(DecryptFilePath, DecryptPasscode, DestinationFilePath));
+            DecryptResult result = await Task.Run(() => encryption.Decrypt(DecryptFilePath, DecryptPasscode, DestinationFilePath));
 
             // Reset statuses once completed.
             CryptoStatus = EncryptionStatus.Idle;
+
+            return result;
         }
+
     }
 }

@@ -71,7 +71,7 @@ namespace Photo_Based_Encryption
 
 
 
-        public void Decrypt(string inputFile, string password, string destination)
+        public DecryptResult Decrypt(string inputFile, string password, string destination)
         {
             // Convert password into an array of bytes.
             byte[] passwordBytes = System.Text.Encoding.UTF8.GetBytes(password);
@@ -109,12 +109,20 @@ namespace Photo_Based_Encryption
                     destination = destination.Replace("\\", "/") + "/";
                     string outputPath = destination + decryptedFileName;
 
-
-                    using (CryptoStream cs = new CryptoStream(ms, aes.CreateDecryptor(), CryptoStreamMode.Write))
+                    try
                     {
-                        // Write from the buffer to the memory stream starting after the salt value.
-                        cs.Write(buffer, salt.Length, buffer.Length - salt.Length);
+                        using (CryptoStream cs = new CryptoStream(ms, aes.CreateDecryptor(), CryptoStreamMode.Write))
+                        {
+                            // Write from the buffer to the memory stream starting after the salt value.
+                            cs.Write(buffer, salt.Length, buffer.Length - salt.Length);
+                        }
+
                     }
+                    catch (CryptographicException)
+                    {
+                        return DecryptResult.Failed;
+                    }
+                    
 
                     byte[] decryptedBytes = ms.ToArray();
 
@@ -122,6 +130,8 @@ namespace Photo_Based_Encryption
                     {
                         fs.Write(decryptedBytes, 0, decryptedBytes.Length);
                     }
+
+                    return DecryptResult.Complete;
                 }
             }
 

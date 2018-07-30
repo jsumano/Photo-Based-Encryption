@@ -67,6 +67,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Encryption.cs" />
+    <Compile Include="enums\DecryptResult.cs" />
     <Compile Include="enums\EncryptionStatus.cs" />
     <Compile Include="ViewModel.cs" />
     <Page Include="MainWindow.xaml">
