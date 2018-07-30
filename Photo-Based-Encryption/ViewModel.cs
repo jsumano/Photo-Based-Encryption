@@ -210,7 +210,7 @@ namespace Photo_Based_Encryption
         }
 
         /// <summary>
-        /// Calls the file encryption.
+        /// Calls the file decryption.
         /// </summary>
         public async Task<DecryptResult> DecryptAsync()
         {

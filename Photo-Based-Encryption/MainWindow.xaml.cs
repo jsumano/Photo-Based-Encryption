@@ -33,6 +33,7 @@ namespace Photo_Based_Encryption
             MessageBox.Show(text);
         }
 
+
         private async void LoadImageButton_Click(object sender, RoutedEventArgs e)
         {
             // Disable the LoadImageButton until the LoadPhotoAsync method has finished execution.
@@ -48,6 +49,11 @@ namespace Photo_Based_Encryption
 
         private async void EncryptButton_Click(object sender, RoutedEventArgs e)
         {
+            await EncryptAsync();
+        }
+
+        private async Task EncryptAsync()
+        {
             // Disable the buttons and the passwordbox until the encryption operation is complete.
             LoadImageButton.IsEnabled = false;
             LoadFiletoEncryptButton.IsEnabled = false;
@@ -58,7 +64,6 @@ namespace Photo_Based_Encryption
             MessageBox.Show("Encryption complete!");
 
             // Reset the UI.
-            LoadImageButton.IsEnabled = true;
             LoadFiletoEncryptButton.IsEnabled = true;
             EncryptionPasswordbox.IsEnabled = true;
             EncryptionPasswordbox.Password = "";
@@ -114,6 +119,14 @@ namespace Photo_Based_Encryption
         private void DestinationButton_Click(object sender, RoutedEventArgs e)
         {
             viewModel.SelectDestination();
+        }
+
+        private async void EncryptionPasswordbox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key != Key.Return)
+                return;
+            if (viewModel.ReadyToEncrypt)
+                await EncryptAsync();
         }
     }
 }
