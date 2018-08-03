@@ -44,7 +44,10 @@ namespace Photo_Based_Encryption
 
         private void LoadFiletoEncryptButton_Click(object sender, RoutedEventArgs e)
         {
-            viewModel.LoadEncryptTargetFile();
+            string feedback = null;
+            viewModel.LoadEncryptTargetFile(ref feedback);
+            if (feedback != null)
+                MessageBox.Show(feedback);
         }
 
         private async void EncryptButton_Click(object sender, RoutedEventArgs e)
@@ -68,7 +71,7 @@ namespace Photo_Based_Encryption
             EncryptionPasswordbox.IsEnabled = true;
             EncryptionPasswordbox.Password = "";
             EncryptButton.Content = "Encrypt";
-            viewModel.StatusText = "Please select a seed image for encryption.";
+            viewModel.StatusText = "Please select a seed image for salt generation.";
             viewModel.ImagePath = "";
             viewModel.EncryptFilePath = "";
         }
