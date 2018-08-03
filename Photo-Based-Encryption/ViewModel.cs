@@ -94,7 +94,7 @@ namespace Photo_Based_Encryption
         /// </summary>
         public ViewModel()
         {
-            StatusText = "Please select a seed image for encryption.";
+            StatusText = "Please select a seed image for salt generation.";
             ImagePath = null;
             EncryptFilePath = null;
             DecryptFilePath = null;
@@ -142,7 +142,7 @@ namespace Photo_Based_Encryption
         /// <summary>
         /// Selects the path of the file to be encrypted.
         /// </summary>
-        public void LoadEncryptTargetFile()
+        public void LoadEncryptTargetFile(ref string response)
         {
             // Resets target file path
             EncryptFilePath = null;
@@ -153,6 +153,12 @@ namespace Photo_Based_Encryption
             if (openFileDialog.ShowDialog() != true)
                 return;
 
+            if (Path.GetExtension(openFileDialog.FileName) == ".aes")
+            {
+                response = "Encrypted files cannot be encrypted a second time. Please select a file that has not been encrypted.";
+                return;
+            }
+                
             // Set the path.
             EncryptFilePath = openFileDialog.FileName;
         }
