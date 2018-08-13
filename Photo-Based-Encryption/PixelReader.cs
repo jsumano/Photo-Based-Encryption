@@ -14,13 +14,12 @@ namespace Photo_Based_Encryption
     public static class PixelReader
     {
         /// <summary>
-        /// Returns a bool value indicating whether the image has a sufficient number of different
-        /// color values to be used as a seed image.
+        /// Returns a bool value indicating whether the image has met the color threshold.
         /// </summary>
         /// <param name="image">The image to be counted.</param>
         /// <param name="threshold">The number of different color values needed.</param>
         /// <returns></returns>
-        public static bool ColorCount(Bitmap image, int threshold)
+        public static bool MeetsColorThreshold(Bitmap image, int threshold)
         {
             // Create a list to store the color values.
             List<Color> imageColors = new List<Color>();

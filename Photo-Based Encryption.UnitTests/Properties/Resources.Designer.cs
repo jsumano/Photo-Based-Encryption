@@ -63,6 +63,16 @@ namespace Photo_Based_Encryption.UnitTests.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap colors10x10 {
+            get {
+                object obj = ResourceManager.GetObject("colors10x10", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap colorwheel100x100 {
             get {
                 object obj = ResourceManager.GetObject("colorwheel100x100", resourceCulture);
