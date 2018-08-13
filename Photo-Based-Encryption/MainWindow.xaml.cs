@@ -99,8 +99,8 @@ namespace Photo_Based_Encryption
             DestinationButton.IsEnabled = false;
             DecryptButton.Content = "Decrypting...";
 
-            DecryptResult result = await viewModel.DecryptAsync();
-            if (result == DecryptResult.Complete)
+            CryptoResult result = await viewModel.DecryptAsync();
+            if (result == CryptoResult.Complete)
             {
                 MessageBox.Show("Decryption complete.");
                 viewModel.DecryptFilePath = "";

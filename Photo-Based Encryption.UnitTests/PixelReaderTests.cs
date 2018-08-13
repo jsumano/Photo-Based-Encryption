@@ -8,7 +8,6 @@ namespace Photo_Based_Encryption.UnitTests
     [TestClass]
     public class PixelReaderTests
     {
-        #region MeetsColorThresholdTests
 
         [TestMethod]
         public void MeetsColorThreshold_GrayscaleImage_ReturnsFalse()
@@ -49,11 +48,6 @@ namespace Photo_Based_Encryption.UnitTests
 
             Assert.AreEqual(true, result);
         }
-
-        #endregion
-
-
-
 
     }
 }
