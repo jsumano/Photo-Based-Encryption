@@ -80,17 +80,7 @@ namespace Photo_Based_Encryption
 
                 Aes aes = CreateAes(passwordBytes, salt);
 
-                // Get the filename.
-                string[] tokens = inputFile.Split('\\');
-                string encryptedFileName = tokens[tokens.Length - 1];
-
-                // Trim the.aes extension off the file name.
-                string decryptedFileName = "";
-                for (int i = 0; i < encryptedFileName.Length - 4; i++)
-                    decryptedFileName += encryptedFileName[i];
-
-                destination = destination.Replace("\\", "/") + "/";
-                string outputPath = destination + decryptedFileName;
+                string outputPath = GetOutputPath(inputFile, destination);
 
                 try
                 {
@@ -133,6 +123,21 @@ namespace Photo_Based_Encryption
             aes.Mode = CipherMode.CBC;
 
             return aes;
+        }
+
+        private string GetOutputPath(string inputFile, string destination)
+        {
+            // Get the filename.
+            string[] tokens = inputFile.Split('\\');
+            string encryptedFileName = tokens[tokens.Length - 1];
+
+            // Trim the.aes extension off the file name.
+            string decryptedFileName = "";
+            for (int i = 0; i < encryptedFileName.Length - 4; i++)
+                decryptedFileName += encryptedFileName[i];
+
+            destination = destination.Replace("\\", "/") + "/";
+            return destination + decryptedFileName;
         }
 
     }
