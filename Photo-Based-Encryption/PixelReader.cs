@@ -93,7 +93,7 @@ namespace Photo_Based_Encryption
         /// <param name="x">The x value of the pixel.</param>
         /// <param name="y">The y value of the pixel.</param>
         /// <returns></returns>
-        private static byte[] GetRGB(Bitmap bitmap, int x, int y)
+        public static byte[] GetRGB(Bitmap bitmap, int x, int y)
         {
             byte[] rgb = new byte[3];
             // Creates a string to parse.

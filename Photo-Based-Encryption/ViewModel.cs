@@ -214,6 +214,8 @@ namespace Photo_Based_Encryption
         /// </summary>
         public async Task EncryptAsync()
         {
+
+
             CryptoStatus = EncryptionStatus.Encrypting;
             StatusText = "Encrypting...";
 

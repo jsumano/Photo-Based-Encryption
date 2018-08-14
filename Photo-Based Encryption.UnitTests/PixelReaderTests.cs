@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Photo_Based_Encryption;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace Photo_Based_Encryption.UnitTests
 {
@@ -47,6 +48,15 @@ namespace Photo_Based_Encryption.UnitTests
             result = PixelReader.MeetsColorThreshold(Properties.Resources.colors10x10, 100);
 
             Assert.AreEqual(true, result);
+        }
+
+        [TestMethod]
+        public void GetRGB_Monochromatic_Returns102_255_79()
+        {
+            byte[] result = PixelReader.GetRGB(Properties.Resources.small, 0, 0);
+            byte[] expected = new byte[] { 102, 255, 79 };
+
+            Assert.IsTrue(expected.SequenceEqual(result)); 
         }
 
     }
