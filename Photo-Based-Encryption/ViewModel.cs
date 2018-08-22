@@ -152,7 +152,7 @@ namespace Photo_Based_Encryption
         /// <summary>
         /// Selects the path of the file to be encrypted.
         /// </summary>
-        public void LoadEncryptTargetFile(ref string response)
+        public void LoadEncryptTargetFile()
         {
             // Resets target file path
             EncryptFilePath = null;
@@ -165,7 +165,7 @@ namespace Photo_Based_Encryption
 
             if (Path.GetExtension(openFileDialog.FileName) == ".aes")
             {
-                response = "Encrypted files cannot be encrypted a second time. Please select a file that has not been encrypted.";
+                MainWindow.Message("Encrypted files cannot be encrypted a second time. Please select a file that has not been encrypted.");
                 return;
             }
                 

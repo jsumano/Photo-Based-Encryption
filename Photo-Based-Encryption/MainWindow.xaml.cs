@@ -33,7 +33,6 @@ namespace Photo_Based_Encryption
             MessageBox.Show(text);
         }
 
-
         private async void LoadImageButton_Click(object sender, RoutedEventArgs e)
         {
             // Disable the LoadImageButton until the LoadPhotoAsync method has finished execution.
@@ -44,10 +43,7 @@ namespace Photo_Based_Encryption
 
         private void LoadFiletoEncryptButton_Click(object sender, RoutedEventArgs e)
         {
-            string feedback = null;
-            viewModel.LoadEncryptTargetFile(ref feedback);
-            if (feedback != null)
-                MessageBox.Show(feedback);
+            viewModel.LoadEncryptTargetFile();
         }
 
         private async void EncryptButton_Click(object sender, RoutedEventArgs e)
