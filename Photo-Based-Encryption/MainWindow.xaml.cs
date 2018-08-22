@@ -33,6 +33,9 @@ namespace Photo_Based_Encryption
             MessageBox.Show(text);
         }
 
+
+        #region Encryption
+
         private async void LoadImageButton_Click(object sender, RoutedEventArgs e)
         {
             // Disable the LoadImageButton until the LoadPhotoAsync method has finished execution.
@@ -46,9 +49,22 @@ namespace Photo_Based_Encryption
             viewModel.LoadEncryptTargetFile();
         }
 
+        private void EncryptionPasswordbox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            viewModel.EncryptPasscode = EncryptionPasswordbox.Password;
+        }
+
         private async void EncryptButton_Click(object sender, RoutedEventArgs e)
         {
             await EncryptAsync();
+        }
+
+        private async void EncryptionPasswordbox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key != Key.Return)
+                return;
+            if (viewModel.ReadyToEncrypt)
+                await EncryptAsync();
         }
 
         private async Task EncryptAsync()
@@ -60,22 +76,27 @@ namespace Photo_Based_Encryption
             EncryptButton.Content = "Encrypting...";
 
             await viewModel.EncryptAsync();
-            MessageBox.Show("Encryption complete!");
 
             // Reset the UI.
             LoadFiletoEncryptButton.IsEnabled = true;
             EncryptionPasswordbox.IsEnabled = true;
             EncryptionPasswordbox.Password = "";
             EncryptButton.Content = "Encrypt";
-            viewModel.StatusText = "Please select a seed image for salt generation.";
-            viewModel.ImagePath = "";
-            viewModel.EncryptFilePath = "";
         }
 
+        #endregion
+
+
+        #region Decrypt
 
         private void LoadFiletoDecryptButton_Click(object sender, RoutedEventArgs e)
         {
             viewModel.LoadDecryptTargetFile();
+        }
+
+        private void DestinationButton_Click(object sender, RoutedEventArgs e)
+        {
+            viewModel.SelectDestination();
         }
 
         private void DecryptPasswordbox_PasswordChanged(object sender, RoutedEventArgs e)
@@ -86,6 +107,14 @@ namespace Photo_Based_Encryption
         private async void DecryptButton_Click(object sender, RoutedEventArgs e)
         {
             await DecryptAsync();
+        }
+
+        private async void DecryptPasswordbox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key != Key.Return)
+                return;
+            if (viewModel.ReadyToDecrypt)
+                await DecryptAsync();
         }
 
         private async Task DecryptAsync()
@@ -113,30 +142,6 @@ namespace Photo_Based_Encryption
             DecryptButton.Content = "Decrypt";
         }
 
-        private void EncryptionPasswordbox_PasswordChanged(object sender, RoutedEventArgs e)
-        {
-            viewModel.EncryptPasscode = EncryptionPasswordbox.Password;
-        }
-
-        private void DestinationButton_Click(object sender, RoutedEventArgs e)
-        {
-            viewModel.SelectDestination();
-        }
-
-        private async void EncryptionPasswordbox_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key != Key.Return)
-                return;
-            if (viewModel.ReadyToEncrypt)
-                await EncryptAsync();
-        }
-
-        private async void DecryptPasswordbox_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key != Key.Return)
-                return;
-            if (viewModel.ReadyToDecrypt)
-                await DecryptAsync();
-        }
+        #endregion
     }
 }

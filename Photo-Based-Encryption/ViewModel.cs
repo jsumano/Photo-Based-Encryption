@@ -214,17 +214,18 @@ namespace Photo_Based_Encryption
         /// </summary>
         public async Task EncryptAsync()
         {
-
-
             CryptoStatus = EncryptionStatus.Encrypting;
             StatusText = "Encrypting...";
 
             Encryption encryption = new Encryption();
             await Task.Run(()=>encryption.Encrypt(EncryptFilePath, EncryptPasscode, ImagePath));
 
-            // Reset statuses once completed.
+            // Reset to initial settings once encryption is complete.
             CryptoStatus = EncryptionStatus.Idle;
-            StatusText = "Encryption Complete.";
+            StatusText = "Please select a seed image for salt generation.";
+            ImagePath = "";
+            EncryptFilePath = "";
+            MainWindow.Message("Encryption complete!");
         }
 
         /// <summary>
