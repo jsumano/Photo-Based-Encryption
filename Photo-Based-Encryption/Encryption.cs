@@ -61,7 +61,12 @@ namespace Photo_Based_Encryption
 
 
 
-
+        /// <summary>
+        /// Decrypts a file using a password.
+        /// </summary>
+        /// <param name="inputFile">The file to decrypt.</param>
+        /// <param name="password">The password used to encrypt the file.</param>
+        /// <param name="destination">The destination of the decrypted file.</param>
         public CryptoResult Decrypt(string inputFile, string password, string destination)
         {
             // Convert password into an array of bytes.
@@ -110,6 +115,12 @@ namespace Photo_Based_Encryption
 
         }
 
+        /// <summary>
+        /// Creates an AES object for encryption and decryption.
+        /// </summary>
+        /// <param name="passwordBytes">The user input password converted to bytes.</param>
+        /// <param name="salt">The salt read from an image file or from a file to be decrypted.</param>
+        /// <returns></returns>
         private Aes CreateAes(byte[] passwordBytes, byte[] salt)
         {
             Aes aes = Aes.Create();
@@ -125,6 +136,13 @@ namespace Photo_Based_Encryption
             return aes;
         }
 
+        /// <summary>
+        /// Returns a concatenated string composed of the input file name and the target destination that is properly formatted
+        /// for use as a destination path.
+        /// </summary>
+        /// <param name="inputFile">The file name.</param>
+        /// <param name="destination">The path of the destination file.</param>
+        /// <returns></returns>
         private string GetOutputPath(string inputFile, string destination)
         {
             // Get the filename.

@@ -240,7 +240,7 @@ namespace Photo_Based_Encryption
 
             if (result == CryptoResult.Complete)
             {
-                MainWindow.Message("Decryption complete.");
+                MainWindow.Message("Decryption complete!");
                 DecryptFilePath = "";
                 DestinationFilePath = "";
             }
