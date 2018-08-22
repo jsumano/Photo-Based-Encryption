@@ -13,9 +13,7 @@ namespace Photo_Based_Encryption.UnitTests
         [TestMethod]
         public void MeetsColorThreshold_GrayscaleImage_ReturnsFalse()
         {
-            bool result = false;
-
-            result = PixelReader.MeetsColorThreshold(Properties.Resources.grayscale100x100, 100);
+            bool result = PixelReader.MeetsColorThreshold(Properties.Resources.grayscale100x100, 100);
 
             Assert.AreEqual(false, result);
         }
@@ -23,9 +21,7 @@ namespace Photo_Based_Encryption.UnitTests
         [TestMethod]
         public void MeetsColorThreshold_ColorCountBelowThreshold_ReturnsFalse()
         {
-            bool result = false;
-
-            result = PixelReader.MeetsColorThreshold(Properties.Resources.small, 100);
+            bool result = PixelReader.MeetsColorThreshold(Properties.Resources.small, 100);
 
             Assert.AreEqual(false, result);
         }
@@ -33,9 +29,7 @@ namespace Photo_Based_Encryption.UnitTests
         [TestMethod]
         public void MeetsColorThreshold_ColorAboveThreshold_ReturnsTrue()
         {
-            bool result = false;
-
-            result = PixelReader.MeetsColorThreshold(Properties.Resources.colorwheel100x100, 100);
+            bool result = PixelReader.MeetsColorThreshold(Properties.Resources.colorwheel100x100, 100);
 
             Assert.AreEqual(true, result);
         }
@@ -43,9 +37,7 @@ namespace Photo_Based_Encryption.UnitTests
         [TestMethod]
         public void MeetsColorThreshold_ColorAtThreshold_ReturnsTrue()
         {
-            bool result = false;
-
-            result = PixelReader.MeetsColorThreshold(Properties.Resources.colors10x10, 100);
+            bool result = PixelReader.MeetsColorThreshold(Properties.Resources.colors10x10, 100);
 
             Assert.AreEqual(true, result);
         }
