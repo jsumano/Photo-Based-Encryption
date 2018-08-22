@@ -231,17 +231,24 @@ namespace Photo_Based_Encryption
         /// <summary>
         /// Calls the file decryption.
         /// </summary>
-        public async Task<CryptoResult> DecryptAsync()
+        public async Task DecryptAsync()
         {
             CryptoStatus = EncryptionStatus.Decrypting;
 
             Encryption encryption = new Encryption();
             CryptoResult result = await Task.Run(() => encryption.Decrypt(DecryptFilePath, DecryptPasscode, DestinationFilePath));
 
+            if (result == CryptoResult.Complete)
+            {
+                MainWindow.Message("Decryption complete.");
+                DecryptFilePath = "";
+                DestinationFilePath = "";
+            }
+            else
+                MainWindow.Message("Incorrect password. Please enter the password used to encrypt the file.");
+
             // Reset statuses once completed.
             CryptoStatus = EncryptionStatus.Idle;
-
-            return result;
         }
 
     }

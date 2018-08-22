@@ -124,17 +124,8 @@ namespace Photo_Based_Encryption
             DestinationButton.IsEnabled = false;
             DecryptButton.Content = "Decrypting...";
 
-            CryptoResult result = await viewModel.DecryptAsync();
-            if (result == CryptoResult.Complete)
-            {
-                MessageBox.Show("Decryption complete.");
-                viewModel.DecryptFilePath = "";
-                viewModel.DestinationFilePath = "";
-            }
-
-            else
-                MessageBox.Show("Incorrect password. Please enter the password used to encrypt the file.");
-
+            await viewModel.DecryptAsync();
+           
             // Reset the UI.
             LoadFiletoDecryptButton.IsEnabled = true;
             DestinationButton.IsEnabled = true;
