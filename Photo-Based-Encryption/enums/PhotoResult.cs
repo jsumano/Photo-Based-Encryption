@@ -2,9 +2,9 @@
 {
     public enum PhotoResult
     {
+        Unchecked,
         Approved,
         FailedComplexity,
-        FailedSize,
-        InvalidFile
+        FailedSize
     }
 }

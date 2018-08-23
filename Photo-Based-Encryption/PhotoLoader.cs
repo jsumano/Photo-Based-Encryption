@@ -9,7 +9,7 @@ namespace Photo_Based_Encryption
     /// <summary>
     /// Performs photo loading operations.
     /// </summary>
-    static class PhotoLoader
+    internal static class PhotoLoader
     {
         /// <summary>
         /// Opens the File Dialog to select the seed image. Returns the path of the selected image.
@@ -32,32 +32,22 @@ namespace Photo_Based_Encryption
         /// <summary>
         /// Inspects the loaded image for size and complexity.
         /// </summary>
-        /// <param name="image">The image to inspect.</param>
+        /// <param name="image">The path of the image to inspect.</param>
         /// <returns></returns>
-        public static async Task<PhotoResult> InspectAsync(string path)
+        public static async Task<PhotoResult> InspectAsync(Bitmap image)
         {
-            Bitmap image = default;
-            try
-            {
-                image = new Bitmap(path);    
-            }
-            catch(Exception)
-            {
-                return PhotoResult.InvalidFile;
-            }
-            
             // The image fails if it is less than 100x100 pixels.
             if (image.Width < 100 || image.Height < 100)
                 return PhotoResult.FailedSize;
 
             // Checks the image to see if it contains enough different color values to reach the specified threshold.
-            bool passComplexity = await Task.Run(() => PixelReader.ColorCount(image, 100));
+            bool passComplexity = await Task.Run(() => PixelReader.MeetsColorThreshold(image, 100));
 
             if (!passComplexity)
                 return PhotoResult.FailedComplexity;
             else
                 return PhotoResult.Approved;
         }
-        
+
     }
 }

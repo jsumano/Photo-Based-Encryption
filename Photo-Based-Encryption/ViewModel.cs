@@ -117,9 +117,20 @@ namespace Photo_Based_Encryption
             if (loadedPath == null)
                 return;
 
+            Bitmap image = default;
+            try
+            {
+                image = new Bitmap(loadedPath);
+            }
+            catch (Exception)
+            {
+                StatusText = "Invalid file or file type.";
+                return;
+            }
+
             // Inspects the photo for size and complexity
             StatusText = "Analyzing image...";
-            PhotoResult result = await PhotoLoader.InspectAsync(loadedPath);
+            PhotoResult result = await PhotoLoader.InspectAsync(image);
 
             // If the image passes inspection it is assigned else an error message is returned.
             if (result == PhotoResult.Approved)
@@ -132,8 +143,7 @@ namespace Photo_Based_Encryption
                 StatusText = "The minimum size for a seed image is 100x100. Please select a larger image file.";
             else if (result == PhotoResult.FailedComplexity)
                 StatusText = "This image is not sufficiently complex. Please select an image with a greater range of color values.";
-            else if (result == PhotoResult.InvalidFile)
-                StatusText = "Invalid file or file type.";
+                
 
             // Resets the image path if the image fails inspection.
             ImagePath = null;
@@ -142,7 +152,7 @@ namespace Photo_Based_Encryption
         /// <summary>
         /// Selects the path of the file to be encrypted.
         /// </summary>
-        public void LoadEncryptTargetFile(ref string response)
+        public void LoadEncryptTargetFile()
         {
             // Resets target file path
             EncryptFilePath = null;
@@ -155,7 +165,7 @@ namespace Photo_Based_Encryption
 
             if (Path.GetExtension(openFileDialog.FileName) == ".aes")
             {
-                response = "Encrypted files cannot be encrypted a second time. Please select a file that has not been encrypted.";
+                MainWindow.Message("Encrypted files cannot be encrypted a second time. Please select a file that has not been encrypted.");
                 return;
             }
                 
@@ -210,25 +220,35 @@ namespace Photo_Based_Encryption
             Encryption encryption = new Encryption();
             await Task.Run(()=>encryption.Encrypt(EncryptFilePath, EncryptPasscode, ImagePath));
 
-            // Reset statuses once completed.
+            // Reset to initial settings once encryption is complete.
             CryptoStatus = EncryptionStatus.Idle;
-            StatusText = "Encryption Complete.";
+            StatusText = "Please select a seed image for salt generation.";
+            ImagePath = "";
+            EncryptFilePath = "";
+            MainWindow.Message("Encryption complete!");
         }
 
         /// <summary>
         /// Calls the file decryption.
         /// </summary>
-        public async Task<DecryptResult> DecryptAsync()
+        public async Task DecryptAsync()
         {
             CryptoStatus = EncryptionStatus.Decrypting;
 
             Encryption encryption = new Encryption();
-            DecryptResult result = await Task.Run(() => encryption.Decrypt(DecryptFilePath, DecryptPasscode, DestinationFilePath));
+            CryptoResult result = await Task.Run(() => encryption.Decrypt(DecryptFilePath, DecryptPasscode, DestinationFilePath));
+
+            if (result == CryptoResult.Complete)
+            {
+                MainWindow.Message("Decryption complete!");
+                DecryptFilePath = "";
+                DestinationFilePath = "";
+            }
+            else
+                MainWindow.Message("Incorrect password. Please enter the password used to encrypt the file.");
 
             // Reset statuses once completed.
             CryptoStatus = EncryptionStatus.Idle;
-
-            return result;
         }
 
     }

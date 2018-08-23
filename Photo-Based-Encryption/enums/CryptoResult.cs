@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Photo_Based_Encryption
 {
-    public enum DecryptResult
+    public enum CryptoResult
     {
         Complete,
         Failed
