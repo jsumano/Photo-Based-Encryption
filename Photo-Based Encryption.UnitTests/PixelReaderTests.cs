@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Photo_Based_Encryption;
 using System.Threading.Tasks;
 using System.Linq;
+using System.Drawing;
 
 namespace Photo_Based_Encryption.UnitTests
 {
@@ -43,12 +44,19 @@ namespace Photo_Based_Encryption.UnitTests
         }
 
         [TestMethod]
-        public void GetRGB_Monochromatic_Returns102_255_79()
+        public void GetRGB_RandomlyGeneratedPixel_ReturnsEqual()
         {
-            byte[] result = PixelReader.GetRGB(Properties.Resources.small, 0, 0);
-            byte[] expected = new byte[] { 102, 255, 79 };
+            for(int i = 0; i < 100; i++)
+            {
+                Bitmap bitmap = new Bitmap(Properties.Resources.blank1x1);
+                Random rand = new Random();
+                byte[] rgb = new byte[] { (byte)rand.Next(255), (byte)rand.Next(255), (byte)rand.Next(255) };
+                bitmap.SetPixel(0, 0, Color.FromArgb(255, rgb[0], rgb[1], rgb[2]));
+                byte[] result = PixelReader.GetRGB(bitmap, 0, 0);
 
-            Assert.IsTrue(expected.SequenceEqual(result)); 
+                Assert.IsTrue(rgb.SequenceEqual(result));
+            }
+            
         }
 
     }
